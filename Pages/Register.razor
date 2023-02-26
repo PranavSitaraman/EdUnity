@@ -1,0 +1,103 @@
+﻿@page "/register"
+@inject NavigationManager NavigationManager;
+@using System.Net
+@using Microsoft.Extensions.Primitives
+@using System.ComponentModel.DataAnnotations
+@using System.Net.Http.Headers
+@using EdUnity.Data
+@code
+{
+    public enum AccountType
+    {
+        Student,
+        Parent,
+        Staff
+    }
+    public class RegisterModel
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public AccountType? Type { get; set; }
+        public bool ModelsIsNull()
+        {
+            return FirstName == null || LastName == null || Email == null || Password == null || Type == null;
+        }
+    }
+}
+<body style="font-weight:bold">
+    <div class="center-align-background" style="width:50%; margin-left:auto; margin-right:auto">
+        <div class="form-outer" style="min-width: 250px; max-width: 500px; margin-left:auto; margin-right:auto">
+            <EditForm Model="@Model" OnValidSubmit="@Submit">
+                <DataAnnotationsValidator />
+                <div class="form-input">
+                <label>First Name</label>
+                <div>
+                    <InputText style="width: 100%; box-sizing: border-box; font-family:'Courier New';font-weight:bold" id="first-name" placeholder="Alice" @bind-Value="Model.FirstName" />
+                </div>
+            </div>
+            <br />
+            <div class="form-input">
+                <label>Last Name</label>
+                <div>
+                    <InputText style="width: 100%; box-sizing: border-box; font-family:'Courier New';font-weight:bold" id="last-name" placeholder="Smith" @bind-Value="Model.LastName" />
+                </div>
+            </div>
+            <br />
+            <div class="form-input">
+                <label>Type</label>
+                <div>
+                    <InputSelectEnum style="width: 100%; box-sizing: border-box; font-family:'Courier New';font-weight:bold" id="type" @bind-Value="Model.Type" />
+                </div>
+            </div>
+            <br />
+            <div class="form-input">
+                <label>Email</label>
+                <div>
+                    <InputText style="width: 100%; box-sizing: border-box; font-family:'Courier New';font-weight:bold" id="email" placeholder="alice-smith@example.com" @bind-Value="Model.Email" />
+                </div>
+            </div>
+            <br />
+            <div class="form-input">
+                <label>Password</label>
+                <div>
+                    <InputText style="width: 100%; box-sizing: border-box; font-family:'Courier New';font-weight:bold" id="password" placeholder="password" @bind-Value="Model.Password" />
+                </div>
+            </div>
+                <br />
+                <div class="form-error">
+                    <ValidationSummary />
+                    @if (!String.IsNullOrEmpty(_resultMessage))
+                    {
+                        <div class="form-error-message"><br>@_resultMessage</div>
+                    }
+                </div>
+                <br />
+                <div class="centered-button-group" style="float:left">
+                    <button type="submit" style="font-family:'Courier New';font-weight:bold">Register</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</body>
+@code
+{
+    private RegisterModel Model = new();
+    private string _resultMessage;
+    private async void Submit()
+    {
+        if (Model.ModelsIsNull())
+        {
+            _resultMessage = "Please enter valid credentials";
+        }
+        else
+        {
+            _resultMessage = "Your credentials will be verified and authorized shortly. Please check back in 24-72 hours.";
+            StateHasChanged();
+            await Task.Delay(2000);
+            NavigationManager.NavigateTo("/login", forceLoad: true);
+        }
+        StateHasChanged();
+    }
+}

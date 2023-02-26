@@ -49,4 +49,16 @@
         <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Shared\InputSelectEnum.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="Data\InputSelectEnum.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Humanizer" Version="2.14.1" />
+    </ItemGroup>
+
 </Project>

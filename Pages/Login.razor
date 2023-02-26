@@ -1,18 +1,29 @@
 ﻿@page "/login"
-@inject HttpClient HttpClient
 @inject NavigationManager NavigationManager;
 @using System.Net
 @using Microsoft.Extensions.Primitives
+@code
+{
+    public class LoginModel
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public bool ModelsIsNull()
+        {
+            return Email == null || Password == null;
+        }
+    }
+}
 <body style="font-weight:bold;">
     <div class="center-align-background" style="width:50%; margin-left:auto; margin-right:auto;">
         <div class="form-outer" style="min-width: 250px; max-width: 500px; margin-left:auto; margin-right:auto">
-            <EditForm OnValidSubmit="@Submit">
+            <EditForm Model="@Model" OnValidSubmit="@Submit">
                 <DataAnnotationsValidator />
                 <div class="form-input">
                     <label>Email</label>
                     <div>
                         <br />
-                        <InputText style="width: 100%; box-sizing: border-box; font-family:'Courier New';font-weight:bold" id="email" placeholder="alice-smith@example.com" @bind-Value="Email" />
+                        <InputText style="width: 100%; box-sizing: border-box; font-family:'Courier New';font-weight:bold" id="email" placeholder="alice-smith@example.com" @bind-Value="Model.Email" />
                     </div>
                 </div>
                 <br />
@@ -20,7 +31,7 @@
                     <label>Password</label>
                     <div>
                         <br />
-                        <InputText style="width: 100%; box-sizing: border-box; font-family:'Courier New';font-weight:bold" id="password" placeholder="password" @bind-Value="Password" />
+                        <InputText style="width: 100%; box-sizing: border-box; font-family:'Courier New';font-weight:bold" id="password" placeholder="password" @bind-Value="Model.Password" />
                     </div>
                 </div>
                 <div class="form-error">
@@ -35,7 +46,7 @@
                     <button type="submit" style="font-family:'Courier New';font-weight:bold">Sign In</button>
                 </div>
             </EditForm>
-            <EditForm OnValidSubmit="@Registration">
+            <EditForm Model="@Model" OnValidSubmit="@Registration">
                 <div class="centered-button-group" style="float:right">
                     <button OnClick=Registration style="font-family:'Courier New';font-weight:bold">Register</button>
                 </div>
@@ -45,24 +56,26 @@
 </body>
 @code
 {
-    private string Email;
-    private string Password;
+    private LoginModel Model = new();
     private string _resultMessage;
-    private string _redirectUrl;
     protected override void OnInitialized()
     {
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
     }
     private async void Submit()
     {
-        if (Email == "fbla@gmail.com" && Password == "fbla")
+        if (Model.ModelsIsNull())
         {
-            _resultMessage = "Login successful!";
+            _resultMessage = "Please enter valid credentials";
+        }
+        else if (Model.Email.Equals("fbla@gmail.com") && Model.Password.Equals("fbla"))
+        {
+            _resultMessage = "Login successful";
             StateHasChanged();
             await Task.Delay(2000);
             NavigationManager.NavigateTo("/", forceLoad: true);
         }
-        else if (Email == "fblagmail.com")
+        else if (Model.Email.Equals("fbla@gmail.com"))
         {
             _resultMessage = "Incorrect email or password";
         }
