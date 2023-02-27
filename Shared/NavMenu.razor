@@ -1,13 +1,10 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="">EdUnity</a>
-		<button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-			<span class="navbar-toggler-icon"></span>
-		</button>
+		<a title="Profile Menu" class="navbar-toggler" href="profile">
+			<span class="oi oi-person"></span>
+		</a>
 	</div>
-</div>
-
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
 </div>
 
 <nav class="navbar navbar-dark bottom-bar fixed-bottom">
@@ -17,15 +14,15 @@
 				<span class="oi oi-home" aria-hidden="true"></span>
 			</NavLink>
 		</div>
-@*		<div class="nav-item">
-			<NavLink class="nav-link" href="login" Match="NavLinkMatch.All">
-				<span class="oi oi-account-login" aria-hidden="true"></span> Login
-			</NavLink>
+		@*		<div class="nav-item">
+		<NavLink class="nav-link" href="login" Match="NavLinkMatch.All">
+		<span class="oi oi-account-login" aria-hidden="true"></span> Login
+		</NavLink>
 		</div>*@
-@*		<div class="nav-item">
-			<NavLink class="nav-link" href="register" Match="NavLinkMatch.All">
-				<span class="oi oi-person" aria-hidden="true"></span> Register
-			</NavLink>
+		@*		<div class="nav-item">
+		<NavLink class="nav-link" href="register" Match="NavLinkMatch.All">
+		<span class="oi oi-person" aria-hidden="true"></span> Register
+		</NavLink>
 		</div>*@
 		<div class="nav-item">
 			<NavLink class="nav-link" href="calendar" Match="NavLinkMatch.All">
