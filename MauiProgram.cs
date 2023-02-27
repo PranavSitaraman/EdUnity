@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.WebView.Maui;
+﻿
+using Microsoft.AspNetCore.Components.WebView.Maui;
 using EdUnity.Data;
 
 namespace EdUnity;
@@ -16,10 +17,10 @@ public static class MauiProgram
 			});
 
 		builder.Services.AddMauiBlazorWebView();
-		#if DEBUG
+#if DEBUG
 		builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
-		
+
 		builder.Services.AddSingleton<WeatherForecastService>();
 
 		return builder.Build();

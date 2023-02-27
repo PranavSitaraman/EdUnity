@@ -8,39 +8,57 @@
 </div>
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-	<nav class="flex-column">
-		<div class="nav-item px-3">
+</div>
+
+<nav class="navbar navbar-dark bottom-bar fixed-bottom">
+	<div class="container-fluid">
+		<div class="nav-item">
+			<NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+				<span class="oi oi-home" aria-hidden="true"></span>
+			</NavLink>
+		</div>
+@*		<div class="nav-item">
 			<NavLink class="nav-link" href="login" Match="NavLinkMatch.All">
 				<span class="oi oi-account-login" aria-hidden="true"></span> Login
 			</NavLink>
-		</div>
-		<div class="nav-item px-3">
+		</div>*@
+@*		<div class="nav-item">
 			<NavLink class="nav-link" href="register" Match="NavLinkMatch.All">
 				<span class="oi oi-person" aria-hidden="true"></span> Register
 			</NavLink>
-		</div>
-		<div class="nav-item px-3">
-			<NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-				<span class="oi oi-home" aria-hidden="true"></span> Home
-			</NavLink>
-		</div>
-		<div class="nav-item px-3">
+		</div>*@
+		<div class="nav-item">
 			<NavLink class="nav-link" href="calendar" Match="NavLinkMatch.All">
-				<span class="oi oi-calendar" aria-hidden="true"></span> Home
+				<span class="oi oi-calendar" aria-hidden="true"></span>
 			</NavLink>
 		</div>
-		<div class="nav-item px-3">
-			<NavLink class="nav-link" href="counter">
-				<span class="oi oi-plus" aria-hidden="true"></span> Counter
+		<div class="nav-item">
+			<NavLink class="nav-link" href="photos" Match="NavLinkMatch.All">
+				<span class="oi oi-image" aria-hidden="true"></span>
 			</NavLink>
 		</div>
-		<div class="nav-item px-3">
-			<NavLink class="nav-link" href="fetchdata">
-				<span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+		<div class="nav-item">
+			<NavLink class="nav-link" href="athletics" Match="NavLinkMatch.All">
+				<span class="oi oi-sun" aria-hidden="true"></span>
 			</NavLink>
 		</div>
-	</nav>
-</div>
+		<div class="nav-item">
+			<NavLink class="nav-link" href="gradebook" Match="NavLinkMatch.All">
+				<span class="oi oi-book" aria-hidden="true"></span>
+			</NavLink>
+		</div>
+		<div class="nav-item">
+			<NavLink class="nav-link" href="transportation" Match="NavLinkMatch.All">
+				<span class="oi oi-map-marker" aria-hidden="true"></span>
+			</NavLink>
+		</div>
+		<div class="nav-item">
+			<NavLink class="nav-link" href="contact" Match="NavLinkMatch.All">
+				<span class="oi oi-chat" aria-hidden="true"></span>
+			</NavLink>
+		</div>
+	</div>
+</nav>
 
 @code {
 	private bool collapseNavMenu = true;
