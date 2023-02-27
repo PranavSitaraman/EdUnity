@@ -54,11 +54,17 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="Pages\Calendar.razor.css" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Content Include="Data\InputSelectEnum.cs" />
+      <Content Include="Pages\Calendar.razor.css" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Humanizer" Version="2.14.1" />
+      <PackageReference Include="XCalendar.Maui" Version="4.2.0" />
     </ItemGroup>
 
 </Project>
