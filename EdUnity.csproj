@@ -54,12 +54,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Pages\Calendar.razor.css" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Content Include="Data\InputSelectEnum.cs" />
-      <Content Include="Pages\Calendar.razor.css" />
     </ItemGroup>
 
     <ItemGroup>

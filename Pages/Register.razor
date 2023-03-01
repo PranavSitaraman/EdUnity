@@ -20,7 +20,7 @@
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public AccountType? Type { get; set; }
+        public AccountType Type { get; set; } = AccountType.Student;
         public bool ModelsIsNull()
         {
             return FirstName == null || LastName == null || Email == null || Password == null || Type == null;
@@ -95,7 +95,7 @@
         {
             resultMessage = "Your credentials will be verified and authorized shortly. Please check back in 24-72 hours.";
             StateHasChanged();
-            await Task.Delay(5000);
+            await Task.Delay(3000);
             NavigationManager.NavigateTo("/login", forceLoad: true);
         }
         StateHasChanged();
