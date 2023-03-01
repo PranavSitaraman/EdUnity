@@ -8,85 +8,66 @@
     {
         public string Email { get; set; }
         public string Password { get; set; }
-        public bool ModelsIsNull()
-        {
-            return Email == null || Password == null;
-        }
+        public bool ModelsIsNull() { return Email == null || Password == null; }
     }
 }
-<body style="font-weight:bold;">
-    <div class="center-align-background" style="width:50%; margin-left:auto; margin-right:auto;">
-        <div class="form-outer" style="min-width: 250px; max-width: 500px; margin-left:auto; margin-right:auto">
-            <EditForm Model="@Model" OnValidSubmit="@Submit">
-                <DataAnnotationsValidator />
-                <div class="form-input">
-                    <label>Email</label>
-                    <div>
-                        <br />
-                        <InputText style="width: 100%; box-sizing: border-box; font-family:'Courier New';font-weight:bold" id="email" placeholder="alice-smith@example.com" @bind-Value="Model.Email" />
-                    </div>
+<body>
+    <div class="form-outer" style="width:50%; margin-left:auto; margin-right:auto">
+        <EditForm Model="@Model" OnValidSubmit="@Submit">
+            <DataAnnotationsValidator />
+            <div class="form-input">
+                <label>Email</label>
+                <div>
+                    <br />
+                    <InputText style="width: 100%" id="email" placeholder="alice-smith@example.com" @bind-Value="Model.Email" />
                 </div>
-                <br />
-                <div class="form-input">
-                    <label>Password</label>
-                    <div>
-                        <br />
-                        <InputText style="width: 100%; box-sizing: border-box; font-family:'Courier New';font-weight:bold" id="password" placeholder="password" @bind-Value="Model.Password" />
-                    </div>
+            </div>
+            <br />
+            <div class="form-input">
+                <label>Password</label>
+                <div>
+                    <br />
+                    <InputText style="width: 100%" id="password" placeholder="password" @bind-Value="Model.Password" />
                 </div>
-                <div class="form-error">
-                    <ValidationSummary />
-                    @if (!String.IsNullOrEmpty(_resultMessage))
-                    {
-                        <div class="form-error-message"><br>@_resultMessage</div>
-                    }
-                </div>
-                <br />
-                <div class="centered-button-group" style="float:left">
-                    <button type="submit" style="font-family:'Courier New';font-weight:bold">Sign In</button>
-                </div>
-            </EditForm>
-            <EditForm Model="@Model" OnValidSubmit="@Registration">
-                <div class="centered-button-group" style="float:right">
-                    <button OnClick=Registration style="font-family:'Courier New';font-weight:bold">Register</button>
-                </div>
-            </EditForm>
-        </div>
+            </div>
+            <div class="form-error">
+                <ValidationSummary />
+                @if (!String.IsNullOrEmpty(resultMessage))
+                {
+                    <div class="form-error-message"><br>@resultMessage</div>
+                }
+            </div>
+            <br />
+            <div class="centered-button-group" style="float:left; width:25%">
+                <button type="submit">Sign In</button>
+            </div>
+            <div class="centered-button-group" style="float:right; width:25%">
+                <button type="button" @onclick=Registration>Register</button>
+            </div>
+        </EditForm>
     </div>
 </body>
 @code
 {
     private LoginModel Model = new();
-    private string _resultMessage;
-    protected override void OnInitialized()
-    {
-        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-    }
+    private string resultMessage;
     private async void Submit()
     {
-        if (Model.ModelsIsNull())
-        {
-            _resultMessage = "Please enter valid credentials";
-        }
+        if (Model.ModelsIsNull()) resultMessage = "Please enter valid credentials";
         else if (Model.Email.Equals("fbla@gmail.com") && Model.Password.Equals("fbla"))
         {
-            _resultMessage = "Login successful";
+            resultMessage = "Login successful";
             StateHasChanged();
             await Task.Delay(2000);
-            NavigationManager.NavigateTo("/", forceLoad: true);
+            NavigationManager.NavigateTo("/home", forceLoad: true);
         }
-        else if (Model.Email.Equals("fbla@gmail.com"))
-        {
-            _resultMessage = "Incorrect email or password";
-        }
-        else
-        {
-            _resultMessage = "Account with specified email does not exist";
-        }
+        else if (Model.Email.Equals("fbla@gmail.com")) resultMessage = "Incorrect email or password";
+        else resultMessage = "Account with specified email does not exist";
         StateHasChanged();
     }
-    private void Registration()
+    private async void Registration()
     {
+        await Task.Delay(2000);
         NavigationManager.NavigateTo("/register", forceLoad: true);
     }
 }

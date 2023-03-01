@@ -1,69 +1,52 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-	<div class="container-fluid">
-		<a class="navbar-brand" href="">EdUnity</a>
-		<a title="Profile Menu" class="navbar-toggler" href="profile">
-			<span class="oi oi-person"></span>
-		</a>
-	</div>
+﻿<div class="@NavMenuCssClass">
+	<nav class="navbar navbar-dark fixed-bottom">
+		<div class="container-fluid" style="margin-left:10%;margin-right:10%">
+			<div class="nav-item">
+				<NavLink class="nav-link" href="profile" Match="NavLinkMatch.All">
+					<span class="oi oi-person" aria-hidden="true"></span>
+				</NavLink>
+			</div>
+			<div class="nav-item">
+				<NavLink class="nav-link" href="home" Match="NavLinkMatch.All">
+					<span class="oi oi-home" aria-hidden="true"></span>
+				</NavLink>
+			</div>
+			<div class="nav-item">
+				<NavLink class="nav-link" href="calendar" Match="NavLinkMatch.All">
+					<span class="oi oi-calendar" aria-hidden="true"></span>
+				</NavLink>
+			</div>
+			<div class="nav-item">
+				<NavLink class="nav-link" href="photos" Match="NavLinkMatch.All">
+					<span class="oi oi-image" aria-hidden="true"></span>
+				</NavLink>
+			</div>
+			<div class="nav-item">
+				<NavLink class="nav-link" href="athletics" Match="NavLinkMatch.All">
+					<span class="oi oi-sun" aria-hidden="true"></span>
+				</NavLink>
+			</div>
+			<div class="nav-item">
+				<NavLink class="nav-link" href="gradebook" Match="NavLinkMatch.All">
+					<span class="oi oi-book" aria-hidden="true"></span>
+				</NavLink>
+			</div>
+			<div class="nav-item">
+				<NavLink class="nav-link" href="transportation" Match="NavLinkMatch.All">
+					<span class="oi oi-map-marker" aria-hidden="true"></span>
+				</NavLink>
+			</div>
+			<div class="nav-item">
+				<NavLink class="nav-link" href="contact" Match="NavLinkMatch.All">
+					<span class="oi oi-chat" aria-hidden="true"></span>
+				</NavLink>
+			</div>
+		</div>
+	</nav>
 </div>
-
-<nav class="navbar navbar-dark bottom-bar fixed-bottom">
-	<div class="container-fluid">
-		<div class="nav-item">
-			<NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-				<span class="oi oi-home" aria-hidden="true"></span>
-			</NavLink>
-		</div>
-		@*		<div class="nav-item">
-		<NavLink class="nav-link" href="login" Match="NavLinkMatch.All">
-		<span class="oi oi-account-login" aria-hidden="true"></span> Login
-		</NavLink>
-		</div>*@
-		@*		<div class="nav-item">
-		<NavLink class="nav-link" href="register" Match="NavLinkMatch.All">
-		<span class="oi oi-person" aria-hidden="true"></span> Register
-		</NavLink>
-		</div>*@
-		<div class="nav-item">
-			<NavLink class="nav-link" href="calendar" Match="NavLinkMatch.All">
-				<span class="oi oi-calendar" aria-hidden="true"></span>
-			</NavLink>
-		</div>
-		<div class="nav-item">
-			<NavLink class="nav-link" href="photos" Match="NavLinkMatch.All">
-				<span class="oi oi-image" aria-hidden="true"></span>
-			</NavLink>
-		</div>
-		<div class="nav-item">
-			<NavLink class="nav-link" href="athletics" Match="NavLinkMatch.All">
-				<span class="oi oi-sun" aria-hidden="true"></span>
-			</NavLink>
-		</div>
-		<div class="nav-item">
-			<NavLink class="nav-link" href="gradebook" Match="NavLinkMatch.All">
-				<span class="oi oi-book" aria-hidden="true"></span>
-			</NavLink>
-		</div>
-		<div class="nav-item">
-			<NavLink class="nav-link" href="transportation" Match="NavLinkMatch.All">
-				<span class="oi oi-map-marker" aria-hidden="true"></span>
-			</NavLink>
-		</div>
-		<div class="nav-item">
-			<NavLink class="nav-link" href="contact" Match="NavLinkMatch.All">
-				<span class="oi oi-chat" aria-hidden="true"></span>
-			</NavLink>
-		</div>
-	</div>
-</nav>
-
-@code {
-	private bool collapseNavMenu = true;
-
-	private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-	private void ToggleNavMenu()
-	{
-		collapseNavMenu = !collapseNavMenu;
-	}
+@code
+{
+	private static bool collapseNavMenu = true;
+	private static string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+	public static void ToggleNavMenu() { collapseNavMenu = !collapseNavMenu; }
 }

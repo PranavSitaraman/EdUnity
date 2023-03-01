@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.WebView.Maui;
 using EdUnity.Data;
 using CommunityToolkit.Maui;
-
 namespace EdUnity;
 public static class MauiProgram
 {

@@ -45,14 +45,3 @@
     background-color: rgba(255,255,255,0.1);
     color: white;
 }
-
-@media (min-width: 641px) {
-    .navbar-toggler {
-        display: none;
-    }
-
-    .collapse {
-        /* Never collapse the sidebar for wide screens */
-        display: block;
-    }
-}
