@@ -95,8 +95,8 @@
         {
             resultMessage = "Your credentials will be verified and authorized shortly. Please check back in 24-72 hours.";
             StateHasChanged();
-            await Task.Delay(3000);
-            NavigationManager.NavigateTo("/login", forceLoad: true);
+            await Task.Delay(2500);
+            NavigationManager.NavigateTo("/login");
         }
         StateHasChanged();
     }
