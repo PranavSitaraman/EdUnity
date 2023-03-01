@@ -4,6 +4,7 @@
 {
     protected override void OnInitialized()
     {
-        NavigationManager.NavigateTo("/login");
+        EdUnity.Shared.NavMenu.ToggleNavMenu();
+        NavigationManager.NavigateTo("/home");
     }
 }

@@ -12,6 +12,7 @@
     }
 }
 <body>
+    <img src="img/edunity-transparent.png" style="margin: auto; width:50%;"/>
     <div class="form-outer" style="width:50%; margin-left:auto; margin-right:auto">
         <EditForm Model="@Model" OnValidSubmit="@Submit">
             <DataAnnotationsValidator />
@@ -54,7 +55,7 @@
     private async void Submit()
     {
         if (Model.ModelsIsNull()) resultMessage = "Please enter valid credentials";
-        else if (Model.Email.Equals("fbla@gmail.com") && Model.Password.Equals("fbla"))
+        else if (Model.Email.Trim().Equals("fbla@gmail.com") && Model.Password.Equals("fbla"))
         {
             resultMessage = "Login successful";
             StateHasChanged();
@@ -62,13 +63,13 @@
             EdUnity.Shared.NavMenu.ToggleNavMenu();
             NavigationManager.NavigateTo("/home", forceLoad: true);
         }
-        else if (Model.Email.Equals("fbla@gmail.com")) resultMessage = "Incorrect email or password";
+        else if (Model.Email.Equals("fbla@gmail.com")) resultMessage = "Incorrect password";
         else resultMessage = "Account with specified email does not exist";
         StateHasChanged();
     }
     private async void Registration()
     {
-        await Task.Delay(2000);
+        await Task.Delay(100);
         NavigationManager.NavigateTo("/register");
     }
 }

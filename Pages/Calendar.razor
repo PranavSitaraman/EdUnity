@@ -1,7 +1,113 @@
 ﻿@page "/calendar"
+@using System.Globalization
 
-<h3>Calendar</h3>
+<div class="d-flex justify-content-center" style="padding-bottom: 1em">
+	<button class="btn btn-secondary month-nav" @onclick="PrevMonth">&lt;</button>
+	<h2>@CurrentMonth.ToString("MMMM yyyy")</h2>
+	<button class="btn btn-secondary month-nav" @onclick="NextMonth">&gt;</button>
+</div>
+
+<table class="table table-bordered table-hover">
+	<thead>
+		<tr>
+			@foreach (var dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
+			{
+				<th>@dayOfWeek.ToString().Substring(0, 3)</th>
+			}
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var week in Weeks)
+		{
+			<tr>
+				@foreach (var day in week.Days)
+				{
+					<td class="@(day.IsCurrentMonth ? "" : "text-muted")" @onclick="()=>ExpandDay(day)">
+						<div class="day-header">@day.day</div>
+						<ul class="list-unstyled">
+							@foreach (var scheduledEvent in day.ScheduledEvents)
+							{
+								<li>@scheduledEvent</li>
+							}
+						</ul>
+					</td>
+				}
+			</tr>
+		}
+	</tbody>
+</table>
 
 @code {
-	
+	private DateTime CurrentMonth = DateTime.Today;
+	private List<Week> Weeks;
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		UpdateWeeks();
+	}
+
+	private void PrevMonth()
+	{
+		CurrentMonth = CurrentMonth.AddMonths(-1);
+		UpdateWeeks();
+	}
+
+	private void NextMonth()
+	{
+		CurrentMonth = CurrentMonth.AddMonths(1);
+		UpdateWeeks();
+	}
+
+	private void UpdateWeeks()
+	{
+		var firstDayOfMonth = new DateTime(CurrentMonth.Year, CurrentMonth.Month, 1);
+		var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+		var start = firstDayOfMonth.AddDays(-(int)firstDayOfMonth.DayOfWeek);
+		var end = lastDayOfMonth.AddDays(6 - (int)lastDayOfMonth.DayOfWeek);
+
+		var weeks = new List<Week>();
+		for (var date = start; date <= end; date = date.AddDays(1))
+		{
+			if (date.DayOfWeek == DayOfWeek.Sunday)
+			{
+				weeks.Add(new Week());
+			}
+			weeks.Last().Days.Add(new Day
+				{
+					day = date.Day,
+					IsCurrentMonth = date.Month == CurrentMonth.Month,
+					ScheduledEvents = new List<string>()
+				});
+		}
+
+		Weeks = weeks;
+	}
+
+	private void AddEvent(Day day)
+	{
+		var scheduledEvent = "school";
+		//var scheduledEvent = prompt("Enter the name of the event:");
+		if (!string.IsNullOrWhiteSpace(scheduledEvent))
+		{
+			day.ScheduledEvents.Add(scheduledEvent);
+		}
+	}
+
+	private void ExpandDay(Day day)
+	{
+
+	}
+
+	private class Day
+	{
+		public int day { get; set; }
+		public bool IsCurrentMonth { get; set; }
+		public List<string> ScheduledEvents { get; set; }
+	}
+
+	private class Week
+	{
+		public List<Day> Days { get; set; } = new List<Day>();
+	}
 }
