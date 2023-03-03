@@ -1,8 +1,9 @@
 ﻿<div class="@NavMenuCssClass top-row ps-3 navbar navbar-dark">
-	<div class="container-fluid">
+	<div class="container-fluid" style="color:white;">
 		<a class="navbar-brand navbar-top" href="/home">
 			<img src="img/edunity-transparent.png" alt="EdUnity" style="height:50px"/>
 		</a>
+		<h3>[Name Here]</h3>
 		<a class="navbar-toggler" href="profile">
 			<span class="oi oi-person"></span>
 		</a>
@@ -50,4 +51,6 @@
 	private static bool collapseNavMenu = true;
 	private static string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 	public static void ToggleNavMenu() { collapseNavMenu = !collapseNavMenu; }
+
+
 }

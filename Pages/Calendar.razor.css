@@ -1,4 +1,11 @@
-﻿.month-nav{
+﻿.month-nav {
     margin: 0 3em;
     padding: 0 1em;
+    color:white;
+    background-color: #511c29;
 }
+
+h3 {
+    color: #511c29;
+}
+

@@ -2,9 +2,9 @@
 @using System.Globalization
 
 <div class="d-flex justify-content-center" style="padding-bottom: 1em">
-	<button class="btn btn-secondary month-nav" @onclick="PrevMonth">&lt;</button>
-	<h2>@CurrentMonth.ToString("MMMM yyyy")</h2>
-	<button class="btn btn-secondary month-nav" @onclick="NextMonth">&gt;</button>
+	<button class="btn month-nav" @onclick="PrevMonth">&lt;</button>
+	<h3>@CurrentMonth.ToString("MMMM yyyy")</h3>
+	<button class="btn month-nav" @onclick="NextMonth">&gt;</button>
 </div>
 
 <table class="table table-bordered table-hover">
@@ -22,7 +22,7 @@
 			<tr>
 				@foreach (var day in week.Days)
 				{
-					<td class="@(day.IsCurrentMonth ? "" : "text-muted")" @onclick="()=>ExpandDay(day)">
+					<td class="@(day.IsCurrentMonth ? "" : "text-muted")" @onclick="()=> ToggleDay(day)">
 						<div class="day-header">@day.day</div>
 						<ul class="list-unstyled">
 							@foreach (var scheduledEvent in day.ScheduledEvents)
@@ -36,13 +36,25 @@
 		}
 	</tbody>
 </table>
+<div class="@collapseDay event-expand container">
+	<div class="row">
+		<!-- events -->
+	</div>
+	<div class="row">
+		<div class="row">Ooga</div>
+		<div class="row"></div>
+	</div>
+</div>
 
 @code {
 	private DateTime CurrentMonth = DateTime.Today;
 	private List<Week> Weeks;
+	private bool DayExpand;
+	private string collapseDay => (DayExpand) ? null : "collapse";
 
 	protected override void OnInitialized()
 	{
+		DayExpand = false;
 		base.OnInitialized();
 		UpdateWeeks();
 	}
@@ -90,24 +102,40 @@
 		//var scheduledEvent = prompt("Enter the name of the event:");
 		if (!string.IsNullOrWhiteSpace(scheduledEvent))
 		{
-			day.ScheduledEvents.Add(scheduledEvent);
+			//	day.ScheduledEvents.Add(scheduledEvent);
+		}
+	}
+
+	private void ToggleDay(Day day)
+	{
+		DayExpand = !DayExpand;
+		if (DayExpand)
+		{
+			ExpandDay(day);
 		}
 	}
 
 	private void ExpandDay(Day day)
 	{
-
 	}
 
 	private class Day
 	{
 		public int day { get; set; }
 		public bool IsCurrentMonth { get; set; }
-		public List<string> ScheduledEvents { get; set; }
+		public List<Event> ScheduledEvents { get; set; }
 	}
 
 	private class Week
 	{
 		public List<Day> Days { get; set; } = new List<Day>();
+	}
+
+	private class Event
+	{
+		public string title { get; set; }
+		public string description { get; set; }
+		public DateTime start { get; set; }
+		public DateTime end { get; set; }
 	}
 }
