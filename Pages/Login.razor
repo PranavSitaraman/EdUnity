@@ -12,9 +12,9 @@
     }
 }
 <body>
-    <img src="img/edunity-transparent.png" style="margin: auto; width:50%;"/>
-    <div class="form-outer" style="width:50%; margin-left:auto; margin-right:auto">
-        <EditForm Model="@Model" OnValidSubmit="@Submit">
+    <div class="form-outer" style="width:75%;max-width:400px;margin-left:auto;margin-right:auto;margin-top:5em;margin-bottom:7em">
+        <img class="form-outer" src="img/edunity-transparent.png" style="display:block;margin-left:auto;margin-right:auto;margin-top:2em;margin-bottom:2em;width:75%;" />
+        <EditForm Model="@Model" style="font-size:min(max(2vw, 10px), 18px)" OnValidSubmit="@Submit">
             <DataAnnotationsValidator />
             <div class="form-input">
                 <label>Email</label>
@@ -39,11 +39,12 @@
                 }
             </div>
             <br />
-            <div class="centered-button-group" style="float:left; width:25%">
-                <button type="submit">Sign In</button>
+            <br/>
+            <div style="margin-left:0;padding-left:0;float:left; width:25%">
+                <button type="submit" style="margin-left:0;float:left;">Sign In</button>
             </div>
-            <div class="centered-button-group" style="float:right; width:25%">
-                <button type="button" @onclick=Registration>Register</button>
+            <div style="margin-right:0;padding-right:0;float:right; width:25%">
+                <button type="button" style="margin-right:0;float:right;" @onclick=Registration>Register</button>
             </div>
         </EditForm>
     </div>
@@ -54,17 +55,17 @@
     private string resultMessage;
     private async void Submit()
     {
-        if (Model.ModelsIsNull()) resultMessage = "Please enter valid credentials";
+        if (Model.ModelsIsNull()) resultMessage = "Please enter valid credentials!";
         else if (Model.Email.Trim().Equals("fbla@gmail.com") && Model.Password.Equals("fbla"))
         {
-            resultMessage = "Login successful";
+            resultMessage = "Login successful!";
             StateHasChanged();
             await Task.Delay(2000);
             EdUnity.Shared.NavMenu.ToggleNavMenu();
             NavigationManager.NavigateTo("/home", forceLoad: true);
         }
-        else if (Model.Email.Equals("fbla@gmail.com")) resultMessage = "Incorrect password";
-        else resultMessage = "Account with specified email does not exist";
+        else if (Model.Email.Equals("fbla@gmail.com")) resultMessage = "Incorrect password!";
+        else resultMessage = "Account with specified email does not exist!";
         StateHasChanged();
     }
     private async void Registration()

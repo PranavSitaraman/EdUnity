@@ -1,7 +1,9 @@
 ﻿@page "/home"
+@inject NavigationManager NavigationManager;
 
-<h3>Home</h3>
+<NavMenu Title="@Title" />
+<h3>@Title</h3>
 
 @code {
-    
+    private string Title = "Home";
 }

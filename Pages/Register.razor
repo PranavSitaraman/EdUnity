@@ -28,8 +28,9 @@
     }
 }
 <body>
-    <div class="form-outer" style="width:50%; margin-left:auto; margin-right:auto">
-        <EditForm Model="@Model" OnValidSubmit="@Submit">
+    <div class="form-outer" style="width:75%;max-width:400px;margin-left:auto;margin-right:auto;margin-top:5em;margin-bottom:7em">
+        <img class="form-outer" src="img/edunity-transparent.png" style="display:block;margin-left:auto;margin-right:auto;margin-top:2em;margin-bottom:2em;width:75%;" />
+        <EditForm Model="@Model" style="font-size:min(max(2vw, 10px), 18px)" OnValidSubmit="@Submit">
             <DataAnnotationsValidator />
             <div class="form-input">
                 <label>First Name</label>
@@ -78,8 +79,9 @@
                 }
             </div>
             <br />
-            <div class="centered-button-group" style="float:left; width:50%">
-                <button type="submit">Register</button>
+            <br />
+            <div style="margin-left:0;padding-left:0;float:left; width:25%">
+                <button type="submit" style="margin-left:0;float:left;">Register</button>
             </div>
         </EditForm>
     </div>
@@ -93,7 +95,7 @@
         if (Model.ModelsIsNull()) resultMessage = "Please enter valid credentials";
         else
         {
-            resultMessage = "Your credentials will be verified and authorized shortly. Please check back in 24-72 hours.";
+            resultMessage = "Your credentials will be verified and authorized shortly. Please check back in 24-72 hours!";
             StateHasChanged();
             await Task.Delay(2500);
             NavigationManager.NavigateTo("/login");

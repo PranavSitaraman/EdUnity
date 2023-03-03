@@ -1,5 +1,7 @@
 ﻿@page "/calendar"
 @using System.Globalization
+<NavMenu Title="@Title" />
+<h3>@Title</h3>
 
 <div class="d-flex justify-content-center" style="padding-bottom: 1em">
 	<button class="btn month-nav" @onclick="PrevMonth">&lt;</button>
@@ -47,6 +49,7 @@
 </div>
 
 @code {
+	private string Title = "Gradebook";
 	private DateTime CurrentMonth = DateTime.Today;
 	private List<Week> Weeks;
 	private bool DayExpand;
@@ -89,7 +92,7 @@
 				{
 					day = date.Day,
 					IsCurrentMonth = date.Month == CurrentMonth.Month,
-					ScheduledEvents = new List<string>()
+					// ScheduledEvents = new List<string>()
 				});
 		}
 

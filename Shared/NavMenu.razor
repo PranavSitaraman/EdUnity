@@ -1,10 +1,10 @@
-﻿<div class="@NavMenuCssClass top-row ps-3 navbar navbar-dark">
+﻿<div class="@NavMenuCssClass top-row navbar navbar-dark">
 	<div class="container-fluid" style="color:white;">
 		<a class="navbar-brand navbar-top" href="/home">
-			<img src="img/edunity-transparent.png" alt="EdUnity" style="height:50px"/>
+			<img src="img/edunity-transparent.png" alt="EdUnity" style="height:50px;margin-right:10px;"/>
 		</a>
-		<h3>[Name Here]</h3>
-		<a class="navbar-toggler" href="profile">
+		<h3>@Title</h3>
+		<a class="navbar-toggler" href="profile" style="margin-left:10px;">
 			<span class="oi oi-person"></span>
 		</a>
 	</div>
@@ -51,6 +51,5 @@
 	private static bool collapseNavMenu = true;
 	private static string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 	public static void ToggleNavMenu() { collapseNavMenu = !collapseNavMenu; }
-
-
+	[Parameter] public string Title { get; set; }
 }

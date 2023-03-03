@@ -1,7 +1,9 @@
 ﻿@page "/athletics"
+@inject NavigationManager NavigationManager;
 
-<h3>Athletics</h3>
+<NavMenu Title="@Title"/>
+<h3>@Title</h3>
 
 @code {
-
+    private string Title = "Athletics";
 }
