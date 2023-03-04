@@ -1,15 +1,14 @@
 ﻿@page "/calendar"
 @using System.Globalization
 <NavMenu Title="@Title" />
-<h3>@Title</h3>
 
 <div class="d-flex justify-content-center" style="padding-bottom: 1em">
 	<button class="btn month-nav" @onclick="PrevMonth">&lt;</button>
-	<h3>@CurrentMonth.ToString("MMMM yyyy")</h3>
+	<h3 class="align-middle">@CurrentMonth.ToString("MMMM yyyy")</h3>
 	<button class="btn month-nav" @onclick="NextMonth">&gt;</button>
 </div>
 
-<table class="table table-bordered table-hover">
+<table class="table">
 	<thead>
 		<tr>
 			@foreach (var dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
@@ -24,7 +23,7 @@
 			<tr>
 				@foreach (var day in week.Days)
 				{
-					<td class="@(day.IsCurrentMonth ? "" : "text-muted")" @onclick="()=> ToggleDay(day)">
+					<td class="@(day.IsCurrentMonth ? "" : "text-muted")" @onclick="()=>ToggleDay(day)">
 						<div class="day-header">@day.day</div>
 						<ul class="list-unstyled">
 							@foreach (var scheduledEvent in day.ScheduledEvents)
@@ -38,13 +37,20 @@
 		}
 	</tbody>
 </table>
-<div class="@collapseDay event-expand container">
+<div class="@collapseDay container ">
 	<div class="row">
-		<!-- events -->
+		<h4>Events on @(selectedDayTitle)</h4>
 	</div>
 	<div class="row">
-		<div class="row">Ooga</div>
-		<div class="row"></div>
+		oop
+	</div>
+	<div class="row">
+		<div class="row">
+			aap
+		</div>
+		<div class="row">
+			eep
+		</div>
 	</div>
 </div>
 
@@ -53,7 +59,9 @@
 	private DateTime CurrentMonth = DateTime.Today;
 	private List<Week> Weeks;
 	private bool DayExpand;
-	private string collapseDay => (DayExpand) ? null : "collapse";
+	private Day selectedDay;
+	private string selectedDayTitle;
+	private string collapseDay => DayExpand ? "selected" : "collapse";
 
 	protected override void OnInitialized()
 	{
@@ -64,12 +72,14 @@
 
 	private void PrevMonth()
 	{
+		ToggleDay(null);
 		CurrentMonth = CurrentMonth.AddMonths(-1);
 		UpdateWeeks();
 	}
 
 	private void NextMonth()
 	{
+		ToggleDay(null);
 		CurrentMonth = CurrentMonth.AddMonths(1);
 		UpdateWeeks();
 	}
@@ -90,12 +100,12 @@
 			}
 			weeks.Last().Days.Add(new Day
 				{
+					date = date,
 					day = date.Day,
 					IsCurrentMonth = date.Month == CurrentMonth.Month,
-					// ScheduledEvents = new List<string>()
+					ScheduledEvents = new List<Event>()
 				});
 		}
-
 		Weeks = weeks;
 	}
 
@@ -111,20 +121,15 @@
 
 	private void ToggleDay(Day day)
 	{
+		selectedDay = !DayExpand ? day : null;
+		selectedDayTitle = !DayExpand ? selectedDay.date.ToString("dddd, MMMM d") : null;
 		DayExpand = !DayExpand;
-		if (DayExpand)
-		{
-			ExpandDay(day);
-		}
-	}
-
-	private void ExpandDay(Day day)
-	{
 	}
 
 	private class Day
 	{
 		public int day { get; set; }
+		public DateTime date;
 		public bool IsCurrentMonth { get; set; }
 		public List<Event> ScheduledEvents { get; set; }
 	}
@@ -138,7 +143,7 @@
 	{
 		public string title { get; set; }
 		public string description { get; set; }
-		public DateTime start { get; set; }
-		public DateTime end { get; set; }
+		public DateTime start;
+		public DateTime end;
 	}
 }

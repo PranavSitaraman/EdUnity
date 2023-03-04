@@ -113,8 +113,8 @@ a, .btn-link {
     border-radius: 5px;
     background-color: #A62639;
     color: #A62639;
-    animation: dot-flashing 0.5s infinite linear alternate;
-    animation-delay: 0.25s;
+    animation: dot-flashing 0.25s infinite linear alternate;
+    animation-delay: 0.125s;
 }
 
     .dot-flashing::before, .dot-flashing::after {
@@ -131,7 +131,7 @@ a, .btn-link {
         border-radius: 5px;
         background-color: #A62639;
         color: #A62639;
-        animation: dot-flashing 1s infinite alternate;
+        animation: dot-flashing 0.25s infinite alternate;
         animation-delay: 0s;
     }
 
@@ -142,8 +142,8 @@ a, .btn-link {
         border-radius: 5px;
         background-color: #A62639;
         color: #A62639;
-        animation: dot-flashing 0.5s infinite alternate;
-        animation-delay: 0.5s;
+        animation: dot-flashing 0.25s infinite alternate;
+        animation-delay: 0.25s;
     }
 
 @keyframes dot-flashing {
