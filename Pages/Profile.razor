@@ -1,7 +1,38 @@
 ﻿@page "/profile"
-
 <NavMenu Title="@Title" />
-
+<section>
+</section>
+<div style="margin-bottom:2em" class="d-flex justify-content-center">
+    <img style="width:15%;aspect-ratio:1;border-radius:50%" src="img/edisonacademy.jpg" />
+</div>
+<div style="margin-bottom:1em" class="d-flex justify-content-center">
+<h4>
+    <b>Name:</b> FBLA
+</h4>
+</div>
+<div style="margin-bottom:1em" class="d-flex justify-content-center">
+<h4>
+    <b>Type:</b> Administrator
+</h4>
+</div>
+<div style="margin-bottom:1em;" class="d-flex justify-content-center">
+<h4>
+    <b>Affiliation:</b> Edison Academy Magnet School
+</h4>
+</div>
+<div style="margin-top:2em;margin-bottom:1em" class="d-flex justify-content-center">
+    <a href="/settings" style="margin-left:5%;margin-right:5%" class="btn mb-4">
+        <span class="fa fa-solid fa-gear" aria-hidden="true"></span>
+    </a>
+    <a href="/bugreport" style="margin-left:5%;margin-right:5%" class="btn mb-4">
+        <span class="fa fa-solid fa-bug" aria-hidden="true"></span>
+    </a>
+    <a href="/terms-conditions/profile" style="margin-left:5%;margin-right:5%" class="btn mb-4">
+        <span class="fa fa-solid fa-file" aria-hidden="true"></span>
+    </a>
+ </div>
+<section>
+</section>
 @code {
     private string Title = "Profile";
 }

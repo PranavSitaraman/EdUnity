@@ -1,0 +1,81 @@
+﻿@page "/settings"
+@inject NavigationManager NavigationManager;
+@using System.Net
+@using Microsoft.Extensions.Primitives
+@using System.ComponentModel.DataAnnotations
+@using System.Net.Http.Headers
+@code
+{
+	public class PasswordModel
+	{
+		public string OldPassword { get; set; }
+		public string NewPassword { get; set; }
+		public string PasswordConfirm { get; set; }
+		public bool ModelsIsNull()
+		{
+			return OldPassword == null || NewPassword == null || PasswordConfirm == null;
+		}
+	}
+}
+<NavMenu Title="@Title" />
+<section>
+	<div class="form-outer">
+		<img src="img/edunity-transparent.png" />
+		<EditForm Model="@Model" OnValidSubmit="@Submit">
+			<DataAnnotationsValidator />
+			<div class="form-input">
+				<label class="form-label">Old Password</label>
+				<div>
+					<InputText type="password" class="form-control" placeholder="Old Password" @bind-Value="Model.OldPassword" />
+				</div>
+			</div>
+			<div class="form-input">
+				<label class="form-label">New Password</label>
+				<div>
+					<InputText type="password" class="form-control" placeholder="New Password" @bind-Value="Model.NewPassword" />
+				</div>
+			</div>
+			<div class="form-input">
+				<label class="form-label">Confirm New Password</label>
+				<div>
+					<InputText type="password" class="form-control" placeholder="Confirm New Password" @bind-Value="Model.PasswordConfirm" />
+				</div>
+			</div>
+			<ValidationSummary />
+			@if (!String.IsNullOrEmpty(resultMessage))
+			{
+				<div class="form-error-message">@resultMessage</div>
+			}
+			<div style="margin-top:5%" class="col d-flex justify-content-center">
+				<button type="submit" class="btn my-4">Register</button>
+			</div>
+		</EditForm>
+		<div style="margin-top:3%" class="col d-flex justify-content-center">
+			<a href="/profile" class="btn my-4" style="margin-right:5%;margin-left:5%;background-color: #a62639; color: white; border: none;">← Back</a>
+			<a href="/login" class="btn my-4" style="margin-right:5%;margin-left:5%;background-color: #a62639; color: white; border: none;">Log Out</a>
+		</div>
+	</div>
+</section>
+@code
+{
+	private string Title = "Settings";
+	private PasswordModel Model = new();
+	private string resultMessage;
+	private async void Submit()
+	{
+		if (Model.ModelsIsNull()) resultMessage = "Please enter valid credentials!";
+		if (Model.OldPassword.Equals("fbla") && Model.NewPassword.Equals(Model.PasswordConfirm))
+		{
+			resultMessage = "Your credentials will be verified and authorized shortly. Please check back in 24-72 hours!";
+			StateHasChanged();
+			await Task.Delay(2500);
+			EdUnity.Shared.NavMenu.ToggleNavMenu();
+			NavigationManager.NavigateTo("/login");
+		}
+		else
+		{
+			resultMessage = "Please enter valid credentials!";
+		}
+		StateHasChanged();
+	}
+}

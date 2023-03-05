@@ -74,10 +74,14 @@
 						<input class="form-check-input" type="checkbox" @bind-value="Model.Agreed"/>
 					</div>
 					<label class="form-check-label">
-						I accept the <a href="/terms-conditions">terms of use</a>
+						I accept the <a href="/terms-conditions/register">terms of use</a>
 					</label>
 				</div>
 			</div>
+			@if (!String.IsNullOrEmpty(resultMessage))
+			{
+				<div class="form-error-message">@resultMessage</div>
+			}
 			<div class="col d-flex justify-content-center">
 				<button type="submit" class="btn my-4">Register</button>
 			</div>
@@ -96,7 +100,7 @@
 		if (Model.ModelsIsNull()) resultMessage = "Please enter valid credentials!";
 		else
 		{
-			resultMessage = "Your credentials will be verified and authorized shortly. Please check back in 24-72 hours!";
+			resultMessage = "Your credentials will be updated shortly. Please check back in 24-72 hours!";
 			StateHasChanged();
 			await Task.Delay(2500);
 			NavigationManager.NavigateTo("/login");

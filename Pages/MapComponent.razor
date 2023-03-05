@@ -1,0 +1,59 @@
+﻿@inject IJSRuntime Js;
+@using System
+@using System.Text.Json
+@inject NavigationManager NavigationManager;
+<div id="@_mapId" class="google-map"></div>
+@code
+{
+    private string _mapId;
+    private double _lat;
+    private double _lon;
+    private bool _mapsInitialized;
+    private bool _domReady;
+    private bool _locationReady;
+    private DotNetObjectReference<MapComponent> _objectReference;
+    protected override void OnInitialized()
+    {
+        _mapId = $"gMap-{Guid.NewGuid()}";
+        _objectReference = DotNetObjectReference.Create(this);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await GeoLocate();
+    }
+    private async Task GeoLocate()
+    {
+        bool location = await Js.InvokeAsync<bool>("getLocation", _objectReference);
+    }
+    [JSInvokable]
+    public async Task SetLocation(double lat, double lon)
+    {
+        _lat = lat;
+        _lon = lon;
+        _locationReady = true;
+        if (!_mapsInitialized && _domReady) await InitMap();
+    }
+    private async Task InitMap()
+    {
+        if (_domReady)
+        {
+            await Js.InvokeVoidAsync("initMap", _objectReference, _mapId, _lat, _lon, 18);
+            _mapsInitialized = true;
+        }
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (_locationReady)
+            {
+                await InitMap();
+                _mapsInitialized = true;
+            }
+            else
+            {
+                _domReady = true;
+            }
+        }
+    }
+}

@@ -1,4 +1,4 @@
-﻿@page "/terms-conditions"
+﻿@page "/terms-conditions/{returnurl}"
 <section>
 	<h1>EdUnity</h1>
 	<h2 id="introduction">Introduction</h2>
@@ -35,7 +35,10 @@
 	<p>EdUnity was made to facilitate the process of communication between the school and the community. The application consists of a collaborative calendar, method of sharing photos, information relating to sports activities, an integrated gradebook, and an interdependent transportation system for students to use together. The application was made using Blazor,  a framework feature of ASP.NET for building interactive web UIs using C#. The differing pieces of code were written on Visual Studio and brought together using GitHub. The application was made to account for different devices, platforms, and capabilities, while integrating most of the features inside of the app → Social Media, Gradebook, Transportation. In the end, we created an application that could be used by students, teachers, and school administration all around the world to better the process of communication. </p>
 
 	<div class="col d-flex justify-content-center">
-		<a href="/register" class="btn my-4" style="background-color: #a62639; color: white; border: none;">← Back</a>
+		<a href="@returnurl" class="btn my-4" style="background-color: #a62639; color: white; border: none;">← Back</a>
 	</div>
 
 </section>
+@code {
+	[Parameter] public string returnurl { get; set; }
+}
