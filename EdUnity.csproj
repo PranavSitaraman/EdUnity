@@ -54,7 +54,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="Pages\Login.razor.css" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Content Include="Data\InputSelectEnum.cs" />
+      <Content Include="Pages\Login.razor.css" />
     </ItemGroup>
 
     <ItemGroup>

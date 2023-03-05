@@ -24,8 +24,8 @@
 				<tr>
 					@foreach (var day in week.Days)
 					{
-						<td scope="row" class="@(day.IsCurrentMonth ? "" : "text-muted")" @onclick="()=>ToggleDay(day)">
-							<div class="day-header">@day.day</div>
+						<td scope="row" @onclick="()=>ToggleDay(day)">
+							<div class="@(day.IsCurrentMonth ? "day-header" : "text-muted")">@day.day</div>
 							<ul class="list-unstyled">
 								@foreach (var scheduledEvent in day.ScheduledEvents)
 								{
@@ -40,22 +40,11 @@
 	</table>
 	<div class="@collapseDay container">
 		<div class="row">
-			<h4 class="text-center">Events on @(selectedDayTitle)</h4>
+			<h4 class="text-center">Events on <strong>@(selectedDayTitle)</strong></h4>
 		</div>
+		<div class="col">
+			<!-- use listgroup to show events on left-->
 
-
-
-
-		<div class="row">
-			oop
-		</div>
-		<div class="row">
-			<div class="row">
-				aap
-			</div>
-			<div class="row">
-				eep
-			</div>
 		</div>
 	</div>
 </section>

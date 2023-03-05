@@ -7,99 +7,89 @@
 @using EdUnity.Data
 @code
 {
-    public enum AccountType
-    {   
-        Student,
-        Parent,
-        Staff,
-        Administrator
-    }
-    public class RegisterModel
-    {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public AccountType Type { get; set; } = AccountType.Student;
-        public bool ModelsIsNull()
-        {
-            return FirstName == null || LastName == null || Email == null || Password == null;
-        }
-    }
+	public enum AccountType
+	{
+		Student,
+		Parent,
+		Staff,
+		Administrator
+	}
+	public class RegisterModel
+	{
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public string Email { get; set; }
+		public string Password { get; set; }
+		public AccountType Type { get; set; } = AccountType.Student;
+		public bool ModelsIsNull()
+		{
+			return FirstName == null || LastName == null || Email == null || Password == null;
+		}
+	}
 }
 <section>
-    <div class="form-outer" style="width:75%;max-width:400px;margin-left:auto;margin-right:auto;margin-top:5em;margin-bottom:7em">
-        <img class="form-outer" src="img/edunity-transparent.png" style="display:block;margin-left:auto;margin-right:auto;margin-top:2em;margin-bottom:2em;width:75%;" />
-        <EditForm Model="@Model" style="font-size:min(max(2vw, 10px), 18px)" OnValidSubmit="@Submit">
-            <DataAnnotationsValidator />
-            <div class="form-input">
-                <label>First Name</label>
-                <div>
-                    <br />
-                    <InputText style="width: 100%" id="first-name" placeholder="Alice" @bind-Value="Model.FirstName" />
-                </div>
-            </div>
-            <br />
-            <div class="form-input">
-                <label>Last Name</label>
-                <div>
-                    <br />
-                    <InputText style="width: 100%" id="last-name" placeholder="Smith" @bind-Value="Model.LastName" />
-                </div>
-            </div>
-            <br />
-            <div class="form-input">
-                <label>Type</label>
-                <div>
-                    <br />
-                    <InputSelectEnum style="width: 100%" id="type" @bind-Value="Model.Type" />
-                </div>
-            </div>
-            <br />
-            <div class="form-input">
-                <label>Email</label>
-                <div>
-                    <br />
-                    <InputText style="width: 100%" id="email" placeholder="alice-smith@example.com" @bind-Value="Model.Email" />
-                </div>
-            </div>
-            <br />
-            <div class="form-input">
-                <label>Password</label>
-                <div>
-                    <br />
-                    <InputText style="width: 100%" id="password" placeholder="password" @bind-Value="Model.Password" />
-                </div>
-            </div>
-            <div class="form-error">
-                <ValidationSummary />
-                @if (!String.IsNullOrEmpty(resultMessage))
-                {
-                    <div class="form-error-message"><br>@resultMessage</div>
-                }
-            </div>
-            <br />
-            <br />
-            <div style="margin-left:0;padding-left:0;float:left; width:25%">
-                <button type="submit" style="margin-left:0;float:left;">Register</button>
-            </div>
-        </EditForm>
-    </div>
+	<div class="form-outer">
+		<img src="img/edunity-transparent.png" />
+		<EditForm Model="@Model" OnValidSubmit="@Submit">
+			<DataAnnotationsValidator />
+			<div>
+				<label class="form-label">First Name</label>
+				<div>
+					<InputText type="text" class="form-control" placeholder="John" @bind-Value="Model.FirstName" />
+				</div>
+			</div>
+			<div class="form-input">
+				<label class="form-label">Last Name</label>
+				<div>
+					<InputText type="text" class="form-control" placeholder="Doe" @bind-Value="Model.LastName" />
+				</div>
+			</div>
+			<div class="form-input">
+				<label class="form-label">Type</label>
+				<div>
+					<InputSelectEnum class="form-select" @bind-Value="Model.Type" />
+				</div>
+			</div>
+			<div class="form-input">
+				<label class="form-label">Email</label>
+				<div>
+					<InputText type="email" class="form-control" placeholder="demo@edunity.org" @bind-Value="Model.Email" />
+				</div>
+			</div>
+			<div class="form-input">
+				<label class="form-label">Password</label>
+				<div>
+					<InputText type="password" class="form-control" placeholder="password" @bind-Value="Model.Password" />
+				</div>
+			</div>
+			<ValidationSummary/>
+			@if (!String.IsNullOrEmpty(resultMessage))
+			{
+				<div class="form-error-message">@resultMessage</div>
+			}
+			<div class="col d-flex justify-content-center">
+				<button type="submit" class="btn my-4">Register</button>
+			</div>
+			<div class="text-center">
+				<p>Already have an account? <a href="/login">Login</a></p>
+			</div>
+		</EditForm>
+	</div>
 </section>
 @code
 {
-    private RegisterModel Model = new();
-    private string resultMessage;
-    private async void Submit()
-    {
-        if (Model.ModelsIsNull()) resultMessage = "Please enter valid credentials";
-        else
-        {
-            resultMessage = "Your credentials will be verified and authorized shortly. Please check back in 24-72 hours!";
-            StateHasChanged();
-            await Task.Delay(2500);
-            NavigationManager.NavigateTo("/login");
-        }
-        StateHasChanged();
-    }
+	private RegisterModel Model = new();
+	private string resultMessage;
+	private async void Submit()
+	{
+		if (Model.ModelsIsNull()) resultMessage = "Please enter valid credentials!";
+		else
+		{
+			resultMessage = "Your credentials will be verified and authorized shortly. Please check back in 24-72 hours!";
+			StateHasChanged();
+			await Task.Delay(2500);
+			NavigationManager.NavigateTo("/login");
+		}
+		StateHasChanged();
+	}
 }
