@@ -31,6 +31,10 @@ h1:focus {
     outline: none;
 }
 
+section{
+    padding: 5%;
+}
+
 a, .btn-link {
     color: #0071c1;
 }

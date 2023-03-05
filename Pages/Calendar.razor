@@ -2,60 +2,66 @@
 @using System.Globalization
 <NavMenu Title="@Title" />
 
-<div class="d-flex justify-content-center" style="padding-bottom: 1em">
-	<button class="btn month-nav" @onclick="PrevMonth">&lt;</button>
-	<h3 class="align-middle">@CurrentMonth.ToString("MMMM yyyy")</h3>
-	<button class="btn month-nav" @onclick="NextMonth">&gt;</button>
-</div>
+<section>
+	<div class="d-flex justify-content-center" style="padding-bottom: 1em">
+		<button class="btn month-nav" @onclick="PrevMonth">&lt;</button>
+		<h3 class="align-middle">@CurrentMonth.ToString("MMMM yyyy")</h3>
+		<button class="btn month-nav" @onclick="NextMonth">&gt;</button>
+	</div>
 
-<table class="table">
-	<thead>
-		<tr>
-			@foreach (var dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
-			{
-				<th>@dayOfWeek.ToString().Substring(0, 3)</th>
-			}
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var week in Weeks)
-		{
+	<table class="table">
+		<thead>
 			<tr>
-				@foreach (var day in week.Days)
+				@foreach (var dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
 				{
-					<td class="@(day.IsCurrentMonth ? "" : "text-muted")" @onclick="()=>ToggleDay(day)">
-						<div class="day-header">@day.day</div>
-						<ul class="list-unstyled">
-							@foreach (var scheduledEvent in day.ScheduledEvents)
-							{
-								<li>@scheduledEvent</li>
-							}
-						</ul>
-					</td>
+					<th scope="col">@dayOfWeek.ToString().Substring(0, 3)</th>
 				}
 			</tr>
-		}
-	</tbody>
-</table>
-<div class="@collapseDay container ">
-	<div class="row">
-		<h4>Events on @(selectedDayTitle)</h4>
-	</div>
-	<div class="row">
-		oop
-	</div>
-	<div class="row">
+		</thead>
+		<tbody>
+			@foreach (var week in Weeks)
+			{
+				<tr>
+					@foreach (var day in week.Days)
+					{
+						<td scope="row" class="@(day.IsCurrentMonth ? "" : "text-muted")" @onclick="()=>ToggleDay(day)">
+							<div class="day-header">@day.day</div>
+							<ul class="list-unstyled">
+								@foreach (var scheduledEvent in day.ScheduledEvents)
+								{
+									<li>@scheduledEvent</li>
+								}
+							</ul>
+						</td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+	<div class="@collapseDay container">
 		<div class="row">
-			aap
+			<h4 class="text-center">Events on @(selectedDayTitle)</h4>
+		</div>
+
+
+
+
+		<div class="row">
+			oop
 		</div>
 		<div class="row">
-			eep
+			<div class="row">
+				aap
+			</div>
+			<div class="row">
+				eep
+			</div>
 		</div>
 	</div>
-</div>
+</section>
 
 @code {
-	private string Title = "Gradebook";
+	private string Title = "Calendar";
 	private DateTime CurrentMonth = DateTime.Today;
 	private List<Week> Weeks;
 	private bool DayExpand;
@@ -111,19 +117,36 @@
 
 	private void AddEvent(Day day)
 	{
-		var scheduledEvent = "school";
+		var name = "school";
 		//var scheduledEvent = prompt("Enter the name of the event:");
-		if (!string.IsNullOrWhiteSpace(scheduledEvent))
+		if (!string.IsNullOrWhiteSpace(name))
 		{
-			//	day.ScheduledEvents.Add(scheduledEvent);
+			//day.ScheduledEvents.Add(name);
 		}
 	}
 
 	private void ToggleDay(Day day)
 	{
-		selectedDay = !DayExpand ? day : null;
-		selectedDayTitle = !DayExpand ? selectedDay.date.ToString("dddd, MMMM d") : null;
-		DayExpand = !DayExpand;
+		if (day == null)
+		{
+			DayExpand = false;
+			selectedDay = null;
+			selectedDayTitle = null;
+		}
+		else
+		{
+			if (day == selectedDay)
+			{
+				selectedDay = null;
+				DayExpand = false;
+			}
+			else
+			{
+				selectedDay = day;
+				DayExpand = true;
+				selectedDayTitle = selectedDay.date.ToString("dddd, MMMM d");
+			}
+		}
 	}
 
 	private class Day
