@@ -22,7 +22,7 @@ EdUnity is  a mobile application intended to help parents and the community stay
 
 The application is created using .NET 6, and can be downloaded directly from the App Store or Google Play Store. EdUnity’s app icon will appear as such on both app marketplaces:
 
-![EdUnity Logo](https://www.dropbox.com/s/7sw2josv4hl09el/EdUnity-transperant.png?dl=0)
+<img src="wwwroot/img/edunity-transparent.png" alt="EdUnity" style="width:20%"/>
 
 # Copyright Material Sources
 
