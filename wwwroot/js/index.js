@@ -38,8 +38,6 @@ function initMap(netObject, elementId, lat, lon, zoom) {
     };
     let mapElement = document.getElementById(elementId);
     map = new google.maps.Map(mapElement, options);
-    pinMarkers = {};
-    pins = {};
     mousedUp = false;
     map.addListener('mousedown', (event) => {
         mousedUp = false;
@@ -47,7 +45,6 @@ function initMap(netObject, elementId, lat, lon, zoom) {
             if (mousedUp === false) {
                 let lat = event.latLng.lat();
                 let lon = event.latLng.lng();
-                yield netObject.invokeMethodAsync("OnLongPress", lat, lon);
             }
         }), 500);
     });

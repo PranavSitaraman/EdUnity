@@ -66,7 +66,7 @@
 		if (Model.ModelsIsNull()) resultMessage = "Please enter valid credentials!";
 		if (Model.OldPassword.Equals("fbla") && Model.NewPassword.Equals(Model.PasswordConfirm))
 		{
-			resultMessage = "Your credentials will be verified and authorized shortly. Please check back in 24-72 hours!";
+			resultMessage = "Your credentials will be updated shortly. Please check back in 24-72 hours!";
 			StateHasChanged();
 			await Task.Delay(2500);
 			EdUnity.Shared.NavMenu.ToggleNavMenu();

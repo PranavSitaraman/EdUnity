@@ -14,16 +14,19 @@
     private DotNetObjectReference<MapComponent> _objectReference;
     protected override void OnInitialized()
     {
+        Console.WriteLine("initialized");
         _mapId = $"gMap-{Guid.NewGuid()}";
         _objectReference = DotNetObjectReference.Create(this);
     }
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine("initialized");
         await GeoLocate();
     }
     private async Task GeoLocate()
     {
         bool location = await Js.InvokeAsync<bool>("getLocation", _objectReference);
+        Console.WriteLine("geolocate done");
     }
     [JSInvokable]
     public async Task SetLocation(double lat, double lon)

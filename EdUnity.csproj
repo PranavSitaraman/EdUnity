@@ -72,4 +72,8 @@
       <Folder Include="wwwroot\img\" />
     </ItemGroup>
 
+<ItemGroup>
+    <None Include="wwwroot\js\index.js" />
+  </ItemGroup>
+
 </Project>
