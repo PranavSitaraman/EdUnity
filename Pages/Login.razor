@@ -2,8 +2,6 @@
 @inject NavigationManager NavigationManager;
 @using System.Net
 @using Microsoft.Extensions.Primitives
-<section>
-</section>
 
 @code
 {
@@ -67,7 +65,6 @@
 			resultMessage = "Login successful!";
 			StateHasChanged();
 			await Task.Delay(2000);
-			EdUnity.Shared.NavMenu.ToggleNavMenu();
 			NavigationManager.NavigateTo("/home", forceLoad: true);
 		}
 		else if (Model.Email.Equals("fbla@gmail.com"))

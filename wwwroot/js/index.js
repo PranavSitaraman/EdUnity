@@ -7,26 +7,11 @@
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-function getLocation(netObject) {
-    function returnPosition(position) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield netObject.invokeMethodAsync('SetLocation', position.coords.latitude, position.coords.longitude);
-        });
-    }
-    function positionError(error) { }
-    if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(returnPosition, positionError);
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-function initMap(netObject, elementId, lat, lon, zoom) {
-    mapNetObject = netObject;
-    let latLng = new google.maps.LatLng(lat, lon);
+function initialize()
+{
+    let latLng = new google.maps.LatLng(40.504362, -74.369188);
     let options = {
-        zoom: zoom,
+        zoom: 18,
         center: latLng,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         streetViewControl: false,
@@ -36,8 +21,7 @@ function initMap(netObject, elementId, lat, lon, zoom) {
         fullscreenControl: false,
         clickableIcons: false
     };
-    let mapElement = document.getElementById(elementId);
-    map = new google.maps.Map(mapElement, options);
+    var map = new google.maps.Map(document.getElementById("map"), options);
     mousedUp = false;
     map.addListener('mousedown', (event) => {
         mousedUp = false;

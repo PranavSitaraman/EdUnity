@@ -18,6 +18,7 @@
 	}
 }
 <NavMenu Title="@Title" />
+<section/>
 <section>
 	<div class="form-outer">
 		<img src="img/edunity-transparent.png" />
@@ -47,7 +48,7 @@
 				<div class="form-error-message">@resultMessage</div>
 			}
 			<div style="margin-top:5%" class="col d-flex justify-content-center">
-				<button type="submit" class="btn my-4">Register</button>
+				<button type="submit" class="btn my-4">Update</button>
 			</div>
 		</EditForm>
 		<div style="margin-top:3%" class="col d-flex justify-content-center">
@@ -56,6 +57,7 @@
 		</div>
 	</div>
 </section>
+<section />
 @code
 {
 	private string Title = "Settings";
@@ -64,12 +66,11 @@
 	private async void Submit()
 	{
 		if (Model.ModelsIsNull()) resultMessage = "Please enter valid credentials!";
-		if (Model.OldPassword.Equals("fbla") && Model.NewPassword.Equals(Model.PasswordConfirm))
+		else if (Model.OldPassword.Equals("fbla") && Model.NewPassword.Equals(Model.PasswordConfirm))
 		{
 			resultMessage = "Your credentials will be updated shortly. Please check back in 24-72 hours!";
 			StateHasChanged();
 			await Task.Delay(2500);
-			EdUnity.Shared.NavMenu.ToggleNavMenu();
 			NavigationManager.NavigateTo("/login");
 		}
 		else

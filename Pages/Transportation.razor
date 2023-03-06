@@ -1,7 +1,17 @@
 ﻿@page "/transportation"
+@inject IJSRuntime Js;
 
 <NavMenu Title="@Title" />
-
+<section />
+<div id="map" style="width:100vw;height:76vh;" />
+<section />
 @code {
     private string Title = "Transportation";
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Js.InvokeVoidAsync("initialize", null);
+        }
+    }
 }

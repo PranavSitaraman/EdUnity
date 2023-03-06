@@ -36,6 +36,11 @@ td:hover {
     background-color: rgba(219, 50, 77, 0.2);
 }
 
-.day-header{
+.day-header {
     font-weight: bold;
+}
+
+.active {
+    background-color: #A62639;
+    color: white;
 }

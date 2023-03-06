@@ -1,10 +1,9 @@
 ﻿@page "/"
 @inject NavigationManager NavigationManager;
-<MapComponent/>
 @code
 {
     protected override void OnInitialized()
     {
-        //NavigationManager.NavigateTo("/login");
+        NavigationManager.NavigateTo("/login");
     }
 }

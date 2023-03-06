@@ -1,7 +1,11 @@
 ﻿@page "/calendar"
 @using System.Globalization
+@using System.Collections.Generic;
+@using System.IO;
+@using Newtonsoft.Json;
+@using EdUnity.Data
 <NavMenu Title="@Title" />
-
+<section/>
 <section>
 	<div class="d-flex justify-content-center" style="padding-bottom: 1em">
 		<button class="btn month-nav" @onclick="PrevMonth">&lt;</button>
@@ -38,16 +42,41 @@
 			}
 		</tbody>
 	</table>
-	<div class="@collapseDay container">
-		<div class="row">
-			<h4 class="text-center">Events on <strong>@(selectedDayTitle)</strong></h4>
+	@if (selectedDay != null)
+	{
+		<div class="selected container-fluid">
+			<div class="row">
+				<h4 class="text-center">
+					Events on <strong>@(selectedDayTitle)</strong>
+				</h4>
+			</div>
+			<div class="row mt-3">
+				<div class="col">
+					<ul class="list-group">
+						@foreach (var e in selectedDay.ScheduledEvents)
+						{
+							<li class="btn list-group-item">@e.title</li>
+						}
+						<li class="btn list-group-item active" aria-current="true">An active item</li>
+						<li class="btn list-group-item">A second item</li>
+						<li class="btn list-group-item">A third item</li>
+						<li class="btn list-group-item">A fourth item</li>
+						<li class="btn list-group-item">And a fifth one</li>
+					</ul>
+				</div>
+				<!-- use listgroup to show events on left-->
+				<div class="col container-fluid">
+					goo
+				</div>
+			</div>
+			<div class="row justify-content-center my-4">
+				<a class="btn active w-25">Add Event</a>
+			</div>
 		</div>
-		<div class="col">
-			<!-- use listgroup to show events on left-->
+	}
 
-		</div>
-	</div>
 </section>
+<section/>
 
 @code {
 	private string Title = "Calendar";
@@ -78,7 +107,11 @@
 		CurrentMonth = CurrentMonth.AddMonths(1);
 		UpdateWeeks();
 	}
-
+	public static List<Event> ReadEvents()
+	{
+		var json = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "events.json"));
+		return JsonConvert.DeserializeObject<List<Event>>(json);
+	}
 	private void UpdateWeeks()
 	{
 		var firstDayOfMonth = new DateTime(CurrentMonth.Year, CurrentMonth.Month, 1);
@@ -93,12 +126,13 @@
 			{
 				weeks.Add(new Week());
 			}
+			var events = new List<Event>();
 			weeks.Last().Days.Add(new Day
 				{
 					date = date,
 					day = date.Day,
 					IsCurrentMonth = date.Month == CurrentMonth.Month,
-					ScheduledEvents = new List<Event>()
+					ScheduledEvents = events
 				});
 		}
 		Weeks = weeks;
@@ -138,7 +172,7 @@
 		}
 	}
 
-	private class Day
+	public class Day
 	{
 		public int day { get; set; }
 		public DateTime date;
@@ -146,12 +180,12 @@
 		public List<Event> ScheduledEvents { get; set; }
 	}
 
-	private class Week
+	public class Week
 	{
 		public List<Day> Days { get; set; } = new List<Day>();
 	}
 
-	private class Event
+	public class Event
 	{
 		public string title { get; set; }
 		public string description { get; set; }
