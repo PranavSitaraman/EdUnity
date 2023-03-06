@@ -26,7 +26,8 @@
 			<label for="floatingTextarea">Bug Report</label>
 		</div>
 		<div style="margin-top:5%" class="col d-flex justify-content-center">
-			<button @onclick="Submit" class="btn my-4">Register</button>
+			<a href="/profile" class="btn my-4" style="margin-right:5%;margin-left:5%;background-color: #a62639; color: white; border: none;">← Back</a>
+			<button @onclick="Submit" class="btn my-4">Submit</button>
 		</div>
 		@if (!String.IsNullOrEmpty(resultMessage))
 		{
