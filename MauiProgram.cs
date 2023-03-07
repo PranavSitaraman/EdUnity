@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components.WebView.Maui;
 using EdUnity.Data;
 using CommunityToolkit.Maui;
+using Blazored.Modal;
+
 namespace EdUnity;
 public static class MauiProgram
 {
@@ -11,9 +13,10 @@ public static class MauiProgram
 		{
 			fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 		}).UseMauiCommunityToolkit();
-		builder.Services.AddMauiBlazorWebView();
+        builder.Services.AddMauiBlazorWebView();
+        builder.Services.AddBlazoredModal();
 #if DEBUG
-		builder.Services.AddBlazorWebViewDeveloperTools();
+        builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
 		return builder.Build();
 	}

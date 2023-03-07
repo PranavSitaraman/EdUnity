@@ -1,0 +1,84 @@
+﻿@using System.Web
+@using System.ComponentModel.DataAnnotations
+@using EdUnity.Data
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime Js;
+<div style="padding:20px" class="d-flex justify-content-center">
+    <EditForm Model="@_model" OnValidSubmit="@Submit">
+        <DataAnnotationsValidator />
+        <div>
+            <label>Name: </label>
+            <InputText style="width:150px" @bind-Value="_model.Name" />
+        </div>
+        <br />
+        <div>
+            <label>Grade: </label>
+            <InputSelectEnum @bind-Value="_model.Class" />
+        </div>
+        <br />
+        <div>
+            <label>Date: </label>
+            <InputDate @bind-Value="_expiresdate" />
+        </div>
+        <br />
+        <div>
+            <label>Time: </label>
+            <InputText type="time" @bind-Value="TimeProxy" />
+        </div>
+        <ValidationSummary />
+        <br />
+        @if (!String.IsNullOrEmpty(resultMessage))
+        {
+            <div class="form-error-message">@resultMessage</div>
+            <br />
+        }
+        <div>
+            <button type="submit">Post</button>
+            <br />
+        </div>
+    </EditForm>
+</div>
+<div style="padding:10px;" class="d-flex justify-content-center">
+    <div style="border-left: thick groove white;width:50px" @onclick="Close">
+        <span style="margin-left:20px" class="fa fa-solid fa-circle-xmark" aria-hidden="true" />
+    </div>
+</div>
+
+@code
+{
+    private string resultMessage;
+    private string TimeProxy
+    {
+        get => _expirestime.ToString();
+        set => TimeSpan.TryParse(value, out _expirestime);
+    }
+    [Parameter] public Func<Task> Close { get; set; }
+    [Parameter] public double Lat { get; set; }
+    [Parameter] public double Lon { get; set; }
+    private DateTime _expiresdate = DateTime.Now.Date;
+    public TimeSpan _expirestime = TimeSpan.FromHours(16.5);
+    public Pin _model = new();
+    private async Task Submit()
+    {
+        if (_model.Name == null)
+        {
+            resultMessage = "Please enter valid credentials!";
+        }
+        else
+        {
+            resultMessage = "Success!";
+            _model.Id = Guid.NewGuid();
+            _model.Lat = Lat;
+            _model.Lon = Lon;
+            _model.Kind = PinKind.Car;
+            _model.Time = (_expiresdate + _expirestime).ToString("MM/dd hh:mm tt");
+            EdUnity.Pages.Transportation._currentPins.Add(_model.Id, _model);
+            await Js.InvokeVoidAsync("placePin", _model);
+            await Js.InvokeVoidAsync("console.log", "placed");
+            _model = new();
+            await Task.Delay(2000);
+            Close();
+        }
+        StateHasChanged();
+    }
+}

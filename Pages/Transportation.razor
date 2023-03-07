@@ -1,17 +1,50 @@
 ﻿@page "/transportation"
+@using EdUnity.Data
 @inject IJSRuntime Js;
 
 <NavMenu Title="@Title" />
+
 <section />
-<div id="map" style="width:100vw;height:76vh;" />
+@if (_lat != null && _lon != null)
+{
+    <ActionMenu Lat="@((double)_lat)" Lon="@((double)_lon)" CloseCallback="@CloseActionMenu" />
+}
+<MapComponent ViewDetailsCallback="@ViewDetails" OnLongPressAsync="@ShowLongPressMenu" />
+@if (_details != null)
+{
+    <EventView Loc="@_currentPins[(Guid)_details]" CloseCallback="@CloseDetailsView"/>
+}
 <section />
 @code {
     private string Title = "Transportation";
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public static Dictionary<Guid, Pin> _currentPins = new();
+    private Double? _lat;
+    private Double? _lon;
+    private Guid? _details;
+    private async Task CloseActionMenu()
     {
-        if (firstRender)
-        {
-            await Js.InvokeVoidAsync("initialize", null);
-        }
+        await Js.InvokeVoidAsync("removeLongPressIndicator");
+        _lat = null;
+        _lon = null;
+        StateHasChanged();
+    }
+    private void CloseDetailsView()
+    {
+        _details = null;
+        StateHasChanged();
+    }
+    private async Task ViewDetails(Guid id)
+    {
+        _details = null;
+        StateHasChanged();
+        _details = id;
+        StateHasChanged();
+    }
+    private async Task ShowLongPressMenu(double lat, double lon)
+    {
+        _lat = lat;
+        _lon = lon;
+        await Js.InvokeVoidAsync("placeLongPressIndicator", lat, lon);
+        StateHasChanged();
     }
 }

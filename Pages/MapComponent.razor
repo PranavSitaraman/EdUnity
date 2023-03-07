@@ -1,0 +1,28 @@
+﻿@inject IJSRuntime Js;
+<div id="map" style="width:100vw;height:76vh;" />
+@code
+{
+    [Parameter] public Func<Guid, Task> ViewDetailsCallback { get; set; }
+    [Parameter] public Func<double[][], string[], Task> SelectLocCallback { get; set; }
+    [Parameter] public Func<double, double, Task> OnLongPressAsync { get; set; }
+    [JSInvokable] public async Task ViewDetails(string idString)
+    {
+        Guid.TryParse(idString, out Guid id);
+        await ViewDetailsCallback(id);
+    }
+    [JSInvokable] public async Task SelectLoc(double[][] sent, string[] ids)
+    {
+        await SelectLocCallback(sent, ids);
+    }
+    [JSInvokable] public async Task OnLongPress(double lat, double lon)
+    {
+        await OnLongPressAsync(lat, lon);
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Js.InvokeVoidAsync("initialize", DotNetObjectReference.Create(this));
+        }
+    }
+}

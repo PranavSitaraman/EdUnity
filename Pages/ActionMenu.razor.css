@@ -1,0 +1,14 @@
+﻿.long-press-menu {
+    background-color: #e66c7e;
+    border: thick groove white;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    margin-top: 110px;
+    margin-left: 25px;
+    border-radius: 10px;
+}
+.long-press-menu div {
+  padding: 15px;
+}
