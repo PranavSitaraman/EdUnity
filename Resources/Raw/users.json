@@ -1,0 +1,52 @@
+﻿[
+  {
+    "Id": 0,
+    "FirstName": "John",
+    "LastName": "Doe",
+    "Email": "john@edunity.org",
+    "Password": "john",
+    "Institution": "EdUnity",
+    "Role": 0,
+    "Agreed": true
+  },
+  {
+    "Id": 1,
+    "FirstName": "Alex",
+    "LastName": "Smith",
+    "Email": "alex@edunity.org",
+    "Password": "alex",
+    "Institution": "EdUnity",
+    "Role": 1,
+    "Agreed": true
+  },
+  {
+    "Id": 2,
+    "FirstName": "Trevor",
+    "LastName": "Palmer",
+    "Email": "trevor@edunity.org",
+    "Password": "trevor",
+    "Institution": "EdUnity",
+    "Role": 2,
+    "Agreed": true
+  },
+  {
+    "Id": 3,
+    "FirstName": "Rube",
+    "LastName": "Parmer",
+    "Email": "rube@edunity.org",
+    "Password": "rube",
+    "Institution": "EdUnity",
+    "Role": 3,
+    "Agreed": true
+  },
+  {
+    "Id": 4,
+    "FirstName": "Jude",
+    "LastName": "Bellingham",
+    "Email": "jude@edunity.org",
+    "Password": "jude",
+    "Institution": "EdUnity",
+    "Role": 1,
+    "Agreed": true
+  }
+]

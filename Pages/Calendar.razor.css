@@ -5,11 +5,8 @@
 .month-nav {
     margin: 0 3em;
     padding: 0 1em;
-    color:white;
+    color: white;
     background-color: #511c29;
-}
-
-h4{
 }
 
 table {
@@ -32,15 +29,30 @@ td {
     border: solid #511c29 1px;
 }
 
-td:hover {
-    background-color: rgba(219, 50, 77, 0.2);
-}
-
 .day-header {
     font-weight: bold;
 }
 
 .active {
-    background-color: #A62639;
     color: white;
+    background-color: #a62639;
+}
+
+.list-group-item {
+    width: 30vw;
+    margin: auto;
+    color: white;
+    margin-bottom: 1vh;
+}
+
+.list-group-item.active {
+    border: solid 2px white;
+}
+
+.event-dot {
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    margin-right: 5px;
 }

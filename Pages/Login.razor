@@ -2,6 +2,9 @@
 @inject NavigationManager NavigationManager;
 @using System.Net
 @using Microsoft.Extensions.Primitives
+@using Newtonsoft.Json
+<section>
+</section>
 
 @code
 {
@@ -57,23 +60,45 @@
 {
 	private LoginModel Model = new();
 	private string resultMessage;
+	private int poop;
+	private List<Tuple<string, string>> logins = new();
+	
+	protected async override void OnInitialized()
+	{
+		await ReadUsers();
+		poop = logins.Count();
+	}
+	
+	private async Task ReadUsers()
+	{
+		using var stream = await FileSystem.OpenAppPackageFileAsync("users.json");
+		using (var reader = new StreamReader(stream))
+		{
+			var json = await reader.ReadToEndAsync();
+			var users = JsonConvert.DeserializeObject<List<EdUnity.Pages.Register.UserModel>>(json);
+			foreach (var u in users)
+			{
+				logins.Add(new Tuple<string, string>(u.Email, u.Password));
+			}
+		}
+	}
+	
 	private async void Submit()
 	{
-		if (Model.ModelsIsNull()) resultMessage = "Please enter valid credentials!";
-		else if (Model.Email.Trim().Equals("fbla@gmail.com") && Model.Password.Equals("fbla"))
+		if (Model.ModelsIsNull())
+		{
+			resultMessage = "Please enter valid credentials!";
+		}
+		else if (logins.Contains(new Tuple<string, string>(Model.Email, Model.Password)))
 		{
 			resultMessage = "Login successful!";
 			StateHasChanged();
 			await Task.Delay(2000);
 			NavigationManager.NavigateTo("/home", forceLoad: true);
 		}
-		else if (Model.Email.Equals("fbla@gmail.com"))
-		{
-			resultMessage = "Incorrect password!";
-		}
 		else
 		{
-			resultMessage = "Account with specified email does not exist!";
+			resultMessage = "Invalid credentials!";
 		}
 		StateHasChanged();
 	}

@@ -54,6 +54,11 @@
       <Compile Remove="Shared\Models\Pin.cs" />
     </ItemGroup>
 
+	<ItemGroup>
+		<Content Remove="Resources\Raw\events.json" />
+		<Content Remove="Resources\Raw\users.json" />
+	</ItemGroup>
+
     <ItemGroup>
       <None Remove="Pages\ActionMenu.razor.css" />
       <None Remove="Pages\Login.razor.css" />

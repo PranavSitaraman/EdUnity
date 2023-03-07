@@ -33,6 +33,7 @@ h1:focus {
 
 section {
     padding: 3%;
+    margin-bottom: 10vh;
 }
 
 a, .btn-link {
