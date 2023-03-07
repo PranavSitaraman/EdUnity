@@ -4,7 +4,6 @@
 
 <NavMenu Title="@Title" />
 
-<section />
 @if (_lat != null && _lon != null)
 {
     <ActionMenu Lat="@((double)_lat)" Lon="@((double)_lon)" CloseCallback="@CloseActionMenu" />
@@ -14,7 +13,6 @@
 {
     <EventView Loc="@_currentPins[(Guid)_details]" CloseCallback="@CloseDetailsView"/>
 }
-<section />
 @code {
     private string Title = "Transportation";
     public static Dictionary<Guid, Pin> _currentPins = new();
