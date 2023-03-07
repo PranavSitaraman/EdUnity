@@ -351,8 +351,7 @@ a, .btn-link {
     position: fixed;
     bottom: 0;
     overflow-y: scroll;
-    left: 30vw;
-    width: 70vw;
+    width: 100vw;
     float: right;
     border-top: thick groove white;
     max-height: 100vh;

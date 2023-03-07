@@ -1,0 +1,55 @@
+{
+  "2": [],
+  "3": [
+    {
+      "title": "Streetcar Essay",
+      "description": "Study themes & motifs",
+      "start": "2023-01-01T00:00:00Z",
+      "end": "2023-01-03T23:59:59Z",
+      "type": 0
+    },
+    {
+      "title": "Read Fahrenheit 451",
+      "description": "Read last 4 chapters",
+      "start": "2023-01-04T08:00:00Z",
+      "end": "2023-01-04T15:00:00Z",
+      "type": 0
+    },
+    {
+      "title": "Calc Test",
+      "description": "Applications of integration",
+      "start": "2023-01-05T15:00:00Z",
+      "end": "2023-01-05T16:00:00Z",
+      "type": 1
+    },
+    {
+      "title": "Stats HW",
+      "description": "Pages 6-7, odds only",
+      "start": "2023-01-06T18:00:00Z",
+      "end": "2023-01-06T20:00:00Z",
+      "type": 1
+    },
+    {
+      "title": "Physics HW",
+      "description": "Problems 12-13 of textbook",
+      "start": "2023-01-08T12:00:00Z",
+      "end": "2023-01-08T16:00:00Z",
+      "type": 2
+    },
+    {
+      "title": "Spanish HW",
+      "description": "Submit paragraph about visit to Spain",
+      "start": "2023-01-09T15:00:00Z",
+      "end": "2023-01-09T16:00:00Z",
+      "type": 3
+    },
+    {
+      "title": "Ski Trip",
+      "description": "School ski trip to nearby mountain",
+      "start": "2023-01-11T08:00:00Z",
+      "end": "2023-01-11T15:00:00Z",
+      "type": 4
+    }
+  ],
+  "4": []
+}

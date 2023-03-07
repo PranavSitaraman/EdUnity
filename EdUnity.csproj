@@ -57,6 +57,7 @@
 	<ItemGroup>
 		<Content Remove="Resources\Raw\events.json" />
 		<Content Remove="Resources\Raw\users.json" />
+		<Content Remove="Resources\Raw\grades.json" />
 	</ItemGroup>
 
     <ItemGroup>
@@ -87,5 +88,11 @@
 <ItemGroup>
     <None Include="wwwroot\js\index.js" />
   </ItemGroup>
+
+<ItemGroup>
+  <MauiAsset Update="Resources\Raw\grades.json">
+    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+  </MauiAsset>
+</ItemGroup>
 
 </Project>
