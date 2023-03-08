@@ -1,9 +1,9 @@
 ﻿@page "/transportation"
 @using EdUnity.Data
 @inject IJSRuntime Js;
-
 <NavMenu Title="@Title" />
-
+<section style="padding:0px"/>
+<section style="padding:0px">
 @if (_lat != null && _lon != null)
 {
     <ActionMenu Lat="@((double)_lat)" Lon="@((double)_lon)" CloseCallback="@CloseActionMenu" />
@@ -13,7 +13,10 @@
 {
     <EventView Loc="@_currentPins[(Guid)_details]" CloseCallback="@CloseDetailsView"/>
 }
-@code {
+</section>
+<section/>
+@code
+{
     private string Title = "Transportation";
     public static Dictionary<Guid, Pin> _currentPins = new();
     private Double? _lat;

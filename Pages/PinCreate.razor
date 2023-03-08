@@ -43,7 +43,6 @@
         <span style="margin-left:20px" class="fa fa-solid fa-circle-xmark" aria-hidden="true" />
     </div>
 </div>
-
 @code
 {
     private string resultMessage;
@@ -60,10 +59,7 @@
     public Pin _model = new();
     private async Task Submit()
     {
-        if (_model.Name == null)
-        {
-            resultMessage = "Please enter valid credentials!";
-        }
+        if (_model.Name == null) resultMessage = "Please enter valid credentials!";
         else
         {
             resultMessage = "Success!";
@@ -74,7 +70,6 @@
             _model.Time = (_expiresdate + _expirestime).ToString("MM/dd hh:mm tt");
             EdUnity.Pages.Transportation._currentPins.Add(_model.Id, _model);
             await Js.InvokeVoidAsync("placePin", _model);
-            await Js.InvokeVoidAsync("console.log", "placed");
             _model = new();
             await Task.Delay(2000);
             Close();

@@ -3,9 +3,6 @@
 @using System.Net
 @using Microsoft.Extensions.Primitives
 @using Newtonsoft.Json
-<section>
-</section>
-
 @code
 {
 	public class LoginModel
@@ -15,7 +12,7 @@
 		public bool ModelsIsNull() { return Email == null || Password == null; }
 	}
 }
-
+<section />
 <section>
 	<form class="form-outer">
 		<img src="img/edunity-transparent.png" />
@@ -55,20 +52,18 @@
 		</EditForm>
 	</form>
 </section>
-
+<section/>
 @code
 {
 	private LoginModel Model = new();
 	private string resultMessage;
 	private int poop;
 	private List<Tuple<string, string>> logins = new();
-	
 	protected async override void OnInitialized()
 	{
 		await ReadUsers();
 		poop = logins.Count();
 	}
-	
 	private async Task ReadUsers()
 	{
 		using var stream = await FileSystem.OpenAppPackageFileAsync("users.json");
@@ -82,24 +77,17 @@
 			}
 		}
 	}
-	
 	private async void Submit()
 	{
-		if (Model.ModelsIsNull())
-		{
-			resultMessage = "Please enter valid credentials!";
-		}
+		if (Model.ModelsIsNull()) resultMessage = "Please enter valid credentials!";
 		else if (logins.Contains(new Tuple<string, string>(Model.Email, Model.Password)))
 		{
 			resultMessage = "Login successful!";
 			StateHasChanged();
 			await Task.Delay(2000);
-			NavigationManager.NavigateTo("/calendar", forceLoad: true);
+			NavigationManager.NavigateTo("/home", forceLoad: true);
 		}
-		else
-		{
-			resultMessage = "Invalid credentials!";
-		}
+		else resultMessage = "Invalid credentials!";
 		StateHasChanged();
 	}
 }

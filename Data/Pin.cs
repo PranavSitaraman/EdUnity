@@ -16,7 +16,7 @@ namespace EdUnity.Data
     }
     public enum PinKind
     {
-        [Display(Name="Car")] Car,
+        [Display(Name="Car")] Car
     }
     public enum Grade
     {

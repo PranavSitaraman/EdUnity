@@ -73,10 +73,7 @@
 			await Task.Delay(2500);
 			NavigationManager.NavigateTo("/login");
 		}
-		else
-		{
-			resultMessage = "Please enter valid credentials!";
-		}
+		else resultMessage = "Please enter valid credentials!";
 		StateHasChanged();
 	}
 }

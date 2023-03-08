@@ -8,9 +8,8 @@
 @using Microsoft.Extensions.Primitives
 @using System.ComponentModel.DataAnnotations
 @using System.Net.Http.Headers
-<NavMenu Title="@Title" />
-
-@code {
+@code
+{
 	public class Day
 	{
 		public int day { get; set; }
@@ -18,12 +17,10 @@
 		public bool IsCurrentMonth { get; set; }
 		public List<Event> ScheduledEvents { get; set; }
 	}
-
 	public class Week
 	{
 		public List<Day> Days { get; set; } = new List<Day>();
 	}
-
 	public class Event
 	{
 		public string title { get; set; }
@@ -32,7 +29,6 @@
 		public DateTime end { get; set; }
 		public EventType type { get; set; }
 	}
-
 	public enum EventType
 	{
 		Holidays,
@@ -41,14 +37,14 @@
 		Celebrations
 	}
 }
-
+<NavMenu Title="@Title" />
+<section/>
 <section>
 	<div class="d-flex justify-content-center" style="padding-bottom: 1em">
 		<button class="btn month-nav" @onclick="PrevMonth">&lt;</button>
 		<h3 class="align-middle">@CurrentMonth.ToString("MMMM yyyy")</h3>
 		<button class="btn month-nav" @onclick="NextMonth">&gt;</button>
 	</div>
-
 	<table class="table">
 		<thead>
 			<tr>
@@ -82,13 +78,7 @@
 	{
 		<div class="selected container-fluid">
 			<div class="row">
-				<h4 class="text-center">
-					Events on <strong>
-						@(
-							selectedDayTitle
-							)
-					</strong>
-				</h4>
+				<h4 class="text-center">Events on <strong>@(selectedDayTitle)</strong></h4>
 			</div>
 			<div class="row my-3">
 				<div class="col container-fluid">
@@ -123,46 +113,14 @@
 			<div class="row justify-content-center mb-4">
 				<button class="btn active w-25" @onclick="OpenPopup">Add Event</button>
 			</div>
+			<br/>
+			<br/>
 		</div>
 	}
-	<!--
-	<div class="form-outer">
-		<EditForm Model="@Model" OnValidSubmit="@Submit">
-			<DataAnnotationsValidator />
-			<div>
-				<label class="form-label">Title</label>
-				<div>
-					<InputText type="text" class="form-control" placeholder="An Event" @bind-Value="Model.title" />
-				</div>
-			</div>
-			<div class="form-input">
-				<label class="form-label">Start Date</label>
-				<div>
-					<InputDate type="text" class="form-control" @bind-Value="Model.start" />
-				</div>
-			</div>
-			<div class="form-input">
-				<label class="form-label">End Date</label>
-				<div>
-					<InputDate type="text" class="form-control" @bind-Value="Model.end" />
-				</div>
-			</div>
-			<div class="form-input">
-				<label class="form-label">Type</label>
-				<div>
-					<InputSelectEnum class="form-select" @bind-Value="Model.type" />
-				</div>
-			</div>
-			<ValidationSummary />
-			<div class="col d-flex justify-content-center">
-				<button type="submit" class="btn my-4">Create</button>
-			</div>
-		</EditForm>
-	</div>
-	-->
 </section>
-
-@code {
+<section/>
+@code
+{
 	private string Title = "Calendar";
 	private DateTime CurrentMonth = DateTime.Today;
 	private List<Week> Weeks = new();
@@ -174,7 +132,6 @@
 	private string popupDisplay = "none";
 	private Event Model = new();
 	private string collapseDay => DayExpand ? "selected" : "collapse";
-
 	protected async override void OnInitialized()
 	{
 		DayExpand = false;
@@ -185,21 +142,18 @@
 		UpdateWeeks();
 		StateHasChanged();
 	}
-
 	private void PrevMonth()
 	{
 		ToggleDay(null);
 		CurrentMonth = CurrentMonth.AddMonths(-1);
 		UpdateWeeks();
 	}
-
 	private void NextMonth()
 	{
 		ToggleDay(null);
 		CurrentMonth = CurrentMonth.AddMonths(1);
 		UpdateWeeks();
 	}
-
 	private string GetType(Event e)
 	{
 		switch (e.type)
@@ -216,7 +170,6 @@
 				return "";
 		}
 	}
-
 	private async Task ReadEvents()
 	{
 		using var stream = await FileSystem.OpenAppPackageFileAsync("events.json");
@@ -226,60 +179,43 @@
 			allEvents = JsonConvert.DeserializeObject<Dictionary<string, List<Event>>>(json);
 		}
 	}
-
 	private void UpdateWeeks()
 	{
 		var firstDayOfMonth = new DateTime(CurrentMonth.Year, CurrentMonth.Month, 1);
 		var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 		var start = firstDayOfMonth.AddDays(-(int)firstDayOfMonth.DayOfWeek);
 		var end = lastDayOfMonth.AddDays(6 - (int)lastDayOfMonth.DayOfWeek);
-
 		var weeks = new List<Week>();
 		for (var date = start; date <= end; date = date.AddDays(1))
 		{
-			if (date.DayOfWeek == DayOfWeek.Sunday)
-			{
-				weeks.Add(new Week());
-			}
-			weeks.Last().Days.Add(new Day
-				{
-					date = date,
-					day = date.Day,
-					IsCurrentMonth = date.Month == CurrentMonth.Month,
-					ScheduledEvents = GetEvents(date)
-				});
+			if (date.DayOfWeek == DayOfWeek.Sunday) weeks.Add(new Week());
+			weeks.Last().Days.Add(new Day {
+				date = date,
+				day = date.Day,
+				IsCurrentMonth = date.Month == CurrentMonth.Month,
+				ScheduledEvents = GetEvents(date)
+			});
 		}
 		Weeks = weeks;
 	}
-
 	private void OpenPopup()
 	{
 		popupDisplay = "block";
 	}
-
 	private void ClosePopup()
 	{
 		popupDisplay = "none";
 	}
-
 	private List<Event> GetEvents(DateTime date)
 	{
 		List<Event> today = new();
-		foreach (Event e in allEvents[date.Month.ToString()])
-		{
-			if (date.Day >= e.start.Day && date.Day <= e.end.Day)
-			{
-				today.Add(e);
-			}
-		}
+		foreach (Event e in allEvents[date.Month.ToString()]) if (date.Day >= e.start.Day && date.Day <= e.end.Day) today.Add(e);
 		return today;
 	}
-
 	private void SetEvent(Event e)
 	{
 		selectedEvent = e;
 	}
-
 	private void ToggleDay(Day day)
 	{
 		if (day == null)
@@ -302,29 +238,18 @@
 				selectedDay = day;
 				DayExpand = true;
 				selectedDayTitle = selectedDay.date.ToString("dddd, MMMM d");
-				if (selectedDay.ScheduledEvents.Count() > 0)
-				{
-					selectedEvent = selectedDay.ScheduledEvents[0];
-				}
-				else
-				{
-					selectedEvent = null;
-				}
+				if (selectedDay.ScheduledEvents.Count() > 0) selectedEvent = selectedDay.ScheduledEvents[0];
+				else selectedEvent = null;
 			}
 		}
 	}
-
 	private bool ValidModel(Event m)
 	{
 		return m.title == null || m.description == null;
 	}
-
 	private void Submit()
 	{
-		if (ValidModel(Model))
-		{
-			return;
-		}
+		if (ValidModel(Model)) return;
 		selectedDay.ScheduledEvents.Add(Model);
 	}
 }

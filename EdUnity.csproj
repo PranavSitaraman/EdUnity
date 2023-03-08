@@ -51,7 +51,6 @@
 
     <ItemGroup>
       <Compile Remove="Shared\InputSelectEnum.cs" />
-      <Compile Remove="Shared\Models\Pin.cs" />
     </ItemGroup>
 
 	<ItemGroup>
@@ -80,7 +79,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Shared\Models\" />
       <Folder Include="wwwroot\font\" />
       <Folder Include="wwwroot\img\" />
     </ItemGroup>

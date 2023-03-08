@@ -20,9 +20,6 @@
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
-        {
-            await Js.InvokeVoidAsync("initialize", DotNetObjectReference.Create(this));
-        }
+        if (firstRender) await Js.InvokeVoidAsync("initialize", DotNetObjectReference.Create(this));
     }
 }

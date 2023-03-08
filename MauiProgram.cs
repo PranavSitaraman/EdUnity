@@ -2,7 +2,6 @@
 using EdUnity.Data;
 using CommunityToolkit.Maui;
 using Blazored.Modal;
-
 namespace EdUnity;
 public static class MauiProgram
 {
@@ -15,9 +14,7 @@ public static class MauiProgram
 		}).UseMauiCommunityToolkit();
         builder.Services.AddMauiBlazorWebView();
         builder.Services.AddBlazoredModal();
-#if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
-#endif
 		return builder.Build();
 	}
 }

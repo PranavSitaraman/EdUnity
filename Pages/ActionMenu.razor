@@ -1,16 +1,14 @@
 ﻿@inject IJSRuntime Js;
-
 <div class="long-press-menu">
     <div @onclick="CreatePin">Carpool Request</div>
     <div style="border-left: thick groove white" @onclick="CloseCallback">
         <span class="fa fa-solid fa-circle-xmark" aria-hidden="true"/>
     </div>
 </div>
-
 @if (show)
 {
     <div class="long-press-menu" style="margin-top:200px">
-    <PinCreate Lat="@Lat" Lon="@Lon" Close="@Close"/>
+        <PinCreate Lat="@Lat" Lon="@Lon" Close="@Close"/>
     </div>
 }
 @code

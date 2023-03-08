@@ -9,7 +9,6 @@
 @using Newtonsoft.Json
 @using System.Reflection
 @using EdUnity.Data
-
 @code
 {
 	public string confirmpass;
@@ -89,9 +88,7 @@
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" @bind-value="Model.Agreed" />
 					</div>
-					<label class="form-check-label">
-						I accept the <a href="/terms-conditions/register">terms of use</a>
-					</label>
+					<label class="form-check-label">I accept the <a href="/terms-conditions/register">terms of use</a></label>
 				</div>
 			</div>
 			<div class="col d-flex justify-content-center">
@@ -107,22 +104,15 @@
 {
 	private UserModel Model = new();
 	private string resultMessage;
-
 	public bool ValidModel(UserModel m)
 	{
 		return !m.Agreed || m.FirstName == null || m.LastName == null || m.Email == null || m.Password == null || m.Password != confirmpass;
 	}
-
 	private async void Submit()
 	{
-
-		if (ValidModel(Model))
-		{
-			resultMessage = "Please enter valid credentials!";	
-		}
+		if (ValidModel(Model)) resultMessage = "Please enter valid credentials!";
 		else
 		{
-			//CreateUser(Model);
 			resultMessage = "Your credentials will be verified and authorized shortly. Please check back in 24-72 hours!";
 			StateHasChanged();
 			await Task.Delay(2500);

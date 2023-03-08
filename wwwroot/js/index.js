@@ -1,7 +1,11 @@
 ﻿var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator)
 {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    function adopt(value)
+    {
+        return value instanceof P ? value : new P(function (resolve){ resolve(value); });
+    }
+    return new (P || (P = Promise))(function (resolve, reject)
+    {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
@@ -9,9 +13,7 @@
     });
 };
 var PinKind;
-(function (PinKind) {
-    PinKind[PinKind["Car"] = 0] = "Car";
-})(PinKind || (PinKind = {}));
+(function (PinKind) { PinKind[PinKind["Car"] = 0] = "Car"; })(PinKind || (PinKind = {}));
 let map, meMarker;
 let pinMarkers = {};
 let pins = {};
@@ -46,7 +48,8 @@ function initialize(netObject)
     map.addListener('mousedown', (event) => {
         mousedUp = false;
         setTimeout(() => __awaiter(this, void 0, void 0, function* () {
-            if (mousedUp === false) {
+            if (mousedUp === false)
+            {
                 let lat = event.latLng.lat();
                 let lon = event.latLng.lng();
                 yield netObject.invokeMethodAsync("OnLongPress", lat, lon);
@@ -63,15 +66,13 @@ function initialize(netObject)
     });
 }
 function initResources() {
-    meIcon =
-    {
+    meIcon = {
         url: "/img/man.svg",
         scaledSize: new google.maps.Size(meSize, meSize),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(meSize / 2, meSize / 2)
     };
-    markerIconsPin =
-    {
+    markerIconsPin = {
         [PinKind.Car]: {
             url: '/img/car.png',
             scaledSize: new google.maps.Size(pinIconSize, pinIconSize),
@@ -79,8 +80,10 @@ function initResources() {
             anchor: new google.maps.Point(pinIconSize / 2, pinIconSize / 2)
         },
     };
-    PinPopup = class extends google.maps.OverlayView {
-        constructor(marker, content) {
+    PinPopup = class extends google.maps.OverlayView
+    {
+        constructor(marker, content)
+        {
             super();
             this.marker = marker;
             this.position = marker.getPosition();
@@ -100,30 +103,31 @@ function initResources() {
             this.containerDiv.appendChild(bubbleAnchor);
             PinPopup.preventMapHitsAndGesturesFrom(this.containerDiv);
         }
-        onAdd() {
+        onAdd()
+        {
             this.getPanes().floatPane.appendChild(this.containerDiv);
         }
-        onRemove() {
-            if (this.containerDiv.parentElement) {
-                this.containerDiv.parentElement.removeChild(this.containerDiv);
-            }
+        onRemove()
+        {
+            if (this.containerDiv.parentElement) this.containerDiv.parentElement.removeChild(this.containerDiv);
         }
-        draw() {
+        draw()
+        {
             const divPosition = this.getProjection().fromLatLngToDivPixel(this.position);
             const display = "block";
-            if (display === "block") {
+            if (display === "block")
+            {
                 this.containerDiv.style.left = divPosition.x + "px";
                 this.containerDiv.style.top = divPosition.y + "px";
             }
-            if (this.containerDiv.style.display !== display) {
-                this.containerDiv.style.display = display;
-            }
+            if (this.containerDiv.style.display !== display) this.containerDiv.style.display = display;
         }
     };
 }
 let curInfoWindow;
 let curInfoWindowId;
-function previewPin(id) {
+function previewPin(id)
+{
     let pin = pins[id];
     let marker = pinMarkers[id];
     let content = document.createElement("div");
@@ -134,10 +138,8 @@ function previewPin(id) {
     curInfoWindow = new PinPopup(marker, content);
     curInfoWindow.setMap(map);
 }
-function placePin(pin) {
-    console.log(pin.lat);
-    console.log(pin.lon);
-    console.log(pin.kind);
+function placePin(pin)
+{
     pins[pin.id] = pin;
     let marker = new google.maps.Marker({
         position: { lat: pin.lat, lng: pin.lon },
@@ -147,13 +149,16 @@ function placePin(pin) {
     marker.addListener("click", () => previewPin(pin.id));
     pinMarkers[pin.id] = marker;
 }
-function pinDetails(id) {
+function pinDetails(id)
+{
     mapNetObject.invokeMethodAsync('ViewDetails', id);
 }
 let longPressIndicator;
-function placeLongPressIndicator(lat, lon) {
+function placeLongPressIndicator(lat, lon)
+{
     let pos = { lat: lat, lng: lon };
-    if (longPressIndicator == undefined) {
+    if (longPressIndicator == undefined)
+    {
         longPressIndicator = new google.maps.Marker({
             position: pos,
             map: map,
@@ -166,12 +171,12 @@ function placeLongPressIndicator(lat, lon) {
             }
         });
     }
-    else {
-        longPressIndicator.setPosition(pos);
-    }
+    else longPressIndicator.setPosition(pos);
 }
-function removeLongPressIndicator() {
-    if (longPressIndicator != undefined) {
+function removeLongPressIndicator()
+{
+    if (longPressIndicator != undefined)
+    {
         longPressIndicator.setMap(null);
         longPressIndicator = undefined;
     }

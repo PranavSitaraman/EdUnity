@@ -1,55 +1,56 @@
-﻿* {
+﻿*
+{
     color: #511c29;
 }
-
-.month-nav {
+.month-nav
+{
     margin: 0 3em;
     padding: 0 1em;
     color: white;
     background-color: #511c29;
 }
-
-table {
+table
+{
     display: table;
     width: 100%;
     table-layout: fixed;
     border: 3px solid #511c29;
     border-radius: 20px;
 }
-
-th, td {
+th, td
+{
     display: table-cell;
 }
-
-th {
+th
+{
     border: solid #511c29 3px;
 }
-
-td {
+td
+{
     border: solid #511c29 1px;
 }
-
-.day-header {
+.day-header
+{
     font-weight: bold;
 }
-
-.active {
+.active
+{
     color: white;
     background-color: #a62639;
 }
-
-.list-group-item {
+.list-group-item
+{
     width: 30vw;
     margin: auto;
     color: white;
     margin-bottom: 1vh;
 }
-
-.list-group-item.active {
+.list-group-item.active
+{
     border: solid 2px white;
 }
-
-.event-dot {
+.event-dot
+{
     border-radius: 50%;
     width: 15px;
     height: 15px;

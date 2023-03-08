@@ -1,14 +1,13 @@
 ﻿@page "/photos"
 <NavMenu Title="@Title" />
+<section/>
 <section>
 	<div class="d-flex flex-row">
 		<div class="card" style="width: 18rem;">
 			<img src="img/ambassadors.jpg" class="card-img-top" alt="...">
 			<div class="card-body">
 				<h5 class="card-title">RWJ Safety Ambassadors</h5>
-				<p class="card-text">
-					Our Safety Ambassadors taught the students helmet safety, safety in & around cars, roads/traffic and safety on stairs.
-				</p>
+				<p class="card-text">Our Safety Ambassadors taught the students helmet safety, safety in & around cars, roads/traffic and safety on stairs.</p>
 			</div>
 		</div>
 		<div class="card" style="width: 18rem;">
@@ -29,9 +28,7 @@
 			<img src="img/un.jpg" class="card-img-top" alt="...">
 			<div class="card-body">
 				<h5 class="card-title">Model UN</h5>
-				<p class="card-text">
-					Students participated in the second annual MCA Model United Nations Conference held in Middlesex College's Crabiel Hall. During the conference, students participated in 3 exciting committees on topics ranging from the social and civil unrest in the Central African Republic to the Titan takeover of Olympus.
-				</p>
+				<p class="card-text">Students participated in the second annual MCA Model United Nations Conference held in Middlesex College's Crabiel Hall. During the conference, students participated in 3 exciting committees on topics ranging from the social and civil unrest in the Central African Republic to the Titan takeover of Olympus.</p>
 			</div>
 		</div>
 		<div class="card" style="width: 18rem;">
@@ -54,20 +51,8 @@
 		</a>
 	</div>
 </section>
-
-@code {
+<section/>
+@code
+{
 	private string Title = "Photos";
-	public async Task ShareFile()
-	{
-		string fn = "img/dance.jpg";
-		string file = Path.Combine(FileSystem.CacheDirectory, fn);
-
-		//File.WriteAllText(file, "Hello World");
-
-		await Share.Default.RequestAsync(new ShareFileRequest
-			{
-				Title = "Share Dance",
-				File = new ShareFile(file)
-			});
-	}
 }
