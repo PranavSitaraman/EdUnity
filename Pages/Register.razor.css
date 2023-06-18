@@ -1,47 +1,70 @@
-﻿section
-{
+﻿section {
     color: #A62639;
 }
-.form-outer
-{
-    padding: 10% 25%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-img
-{
+
+img {
     width: 50%;
     margin: auto;
 }
-.form-label
-{
+
+.form-label {
     padding-top: 10%;
     font-weight: bold;
     border-color: #A62639;
 }
-.form-control
-{
+
+.form-control {
     outline: none;
 }
-form-check-input, .form-check-input:checked
-{
+
+form-check-input, .form-check-input:checked {
     background-color: #A62639;
 }
-.form-check-input
-{
+
+.form-check-input {
     border-color: #A62639;
 }
-.form-error-message
-{
+
+.form-error-message {
     padding-top: 5%;
-    font-style:italic;
+    font-style: italic;
     font-size: 14px;
 }
-.btn
-{
+
+.btn {
     background-color: #A62639;
     color: white;
     min-width: 100px;
     width: 25%;
+}
+
+.autocomplete {
+    position: relative;
+}
+
+.autocomplete-items {
+    position: absolute;
+    z-index: 999;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.autocomplete-items div:hover {
+    background-color: #e9e9e9;
+}
+
+.autocomplete-items div:last-child {
+    border-bottom: none;
 }

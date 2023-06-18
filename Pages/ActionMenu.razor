@@ -18,7 +18,7 @@
     [Parameter] public Func<Task> CloseCallback { get; set; }
     [CascadingParameter] public IModalService Modal { get; set; }
     public bool show = false;
-    private async Task CreatePin()
+    private void CreatePin()
     {
         show = true;
         StateHasChanged();
@@ -27,6 +27,6 @@
     {
         show = false;
         StateHasChanged();
-        CloseCallback();
+        await CloseCallback();
     }
 }

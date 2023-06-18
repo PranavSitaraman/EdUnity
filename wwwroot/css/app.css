@@ -48,6 +48,12 @@ a, .btn-link
 {
     padding-top: 1.1rem;
 }
+.form-outer {
+    padding: 10% 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 .valid.modified:not([type=checkbox])
 {
     outline: 1px solid #26b050;

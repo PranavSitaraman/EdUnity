@@ -1,36 +1,9 @@
 ﻿@page "/register"
 @inject NavigationManager NavigationManager;
+
 @using System.Net
-@using Microsoft.Extensions.Primitives
-@using System.ComponentModel.DataAnnotations
-@using System.Net.Http.Headers
-@using System.Collections.Generic
-@using System.IO;
-@using Newtonsoft.Json
-@using System.Reflection
 @using EdUnity.Data
-@code
-{
-	public string confirmpass;
-	public enum AccountType
-	{
-		Student,
-		Parent,
-		Staff,
-		Administrator
-	}
-	public class UserModel
-	{
-		public int Id { get; set; }
-		public string FirstName { get; set; }
-		public string LastName { get; set; }
-		public string Email { get; set; }
-		public string Password { get; set; }
-		public string Institution { get; set; }
-		public AccountType Role { get; set; } = AccountType.Student;
-		public bool Agreed { get; set; }
-	}
-}
+
 <section>
 	<div class="form-outer">
 		<img src="img/edunity-transparent.png" />
@@ -39,54 +12,69 @@
 			<div>
 				<label class="form-label">First Name</label>
 				<div>
-					<InputText type="text" class="form-control" placeholder="John" @bind-Value="Model.FirstName" />
+					<InputText type="text" class="form-control" placeholder="John" @bind-Value="Model.FIRST_NAME" />
 				</div>
 			</div>
 			<div class="form-input">
 				<label class="form-label">Last Name</label>
 				<div>
-					<InputText type="text" class="form-control" placeholder="Doe" @bind-Value="Model.LastName" />
-				</div>
-			</div>
-			<div class="form-input">
-				<label class="form-label">Role</label>
-				<div>
-					<InputSelectEnum class="form-select" @bind-Value="Model.Role" />
-				</div>
-			</div>
-			<div class="form-input">
-				<label class="form-label">Institution</label>
-				<div>
-					<InputText type="text" class="form-control" placeholder="EdUnity" @bind-Value="Model.Institution" />
+					<InputText type="text" class="form-control" placeholder="Doe" @bind-Value="Model.LAST_NAME" />
 				</div>
 			</div>
 			<div class="form-input">
 				<label class="form-label">Email</label>
 				<div>
-					<InputText type="email" class="form-control" placeholder="demo@edunity.org" @bind-Value="Model.Email" />
+					<InputText type="email" class="form-control" placeholder="demo@edunity.org" @bind-Value="Model.EMAIL" />
 				</div>
 			</div>
 			<div class="form-input">
 				<label class="form-label">Password</label>
 				<div>
-					<InputText type="password" class="form-control" placeholder="password" @bind-Value="Model.Password" />
+					<InputText type="password" class="form-control" placeholder="password" @bind-Value="Model.PASSWORD" />
 				</div>
 			</div>
 			<div class="form-input">
 				<label class="form-label">Confirm Password</label>
 				<div>
-					<InputText type="password" class="form-control" placeholder="confirm password" @bind-Value="confirmpass" />
+					<InputText type="password" class="form-control" placeholder="confirm password" @bind-Value="ConfirmPass" />
+				</div>
+			</div>
+			<div class="form-input">
+				<label class="form-label">Role</label>
+				<div>
+					<InputSelectEnum class="form-select" @bind-Value="Model.ROLE" />
+				</div>
+			</div>
+			<div class="form-input" style="display:@((Model.ROLE == AccountType.PARENT) ? "" : "none")">
+				<label class="form-label">Child Email</label>
+				<div>
+					<InputText type="text" class="form-control" placeholder="demo@edunity.org" @bind-Value="ChildEmail" />
+				</div>
+			</div>
+			<div class="form-input" style="display:@((Model.ROLE != AccountType.PARENT) ? "" : "none")">
+				<label class="form-label">Institution</label>
+				<div class="autocomplete">
+					<input type="text" class="form-control" placeholder="EdUnity" @bind="InstitutionName" @oninput="Autocomplete" />
+					@if (ShowAutocompleteResults)
+					{
+						<div class="autocomplete-items">
+							@foreach (var school in AutocompleteResults)
+							{
+								<div @onclick="(() => SetSelectedInstitution(school))">@school.NAME | @school.CITY, @school.STATE @school.ZIP</div>
+							}
+						</div>
+					}
 				</div>
 			</div>
 			<ValidationSummary />
-			@if (!String.IsNullOrEmpty(resultMessage))
+			@if (!String.IsNullOrEmpty(ResultMessage))
 			{
-				<div class="form-error-message">@resultMessage</div>
+				<div class="form-error-message">@ResultMessage</div>
 			}
 			<div class="row pt-4">
 				<div class="col d-flex justify-content-center">
 					<div class="form-check">
-						<input class="form-check-input" type="checkbox" @bind-value="Model.Agreed" />
+						<input class="form-check-input" type="checkbox" @bind-value="Agreed" />
 					</div>
 					<label class="form-check-label">I accept the <a href="/terms-conditions/register">terms of use</a></label>
 				</div>
@@ -100,24 +88,84 @@
 		</EditForm>
 	</div>
 </section>
+
 @code
 {
-	private UserModel Model = new();
-	private string resultMessage;
-	public bool ValidModel(UserModel m)
+	private User Model = new();
+	private string ResultMessage;
+	private string ConfirmPass;
+	private string ChildEmail;
+	private bool Agreed;
+	private string InstitutionName;
+	private bool ShowAutocompleteResults;
+	private List<Institution> AutocompleteResults = new();
+
+	public bool InvalidModel(User m)
 	{
-		return !m.Agreed || m.FirstName == null || m.LastName == null || m.Email == null || m.Password == null || m.Password != confirmpass;
+		return !Agreed || m.FIRST_NAME == null || m.LAST_NAME == null || m.EMAIL == null || m.PASSWORD == null || m.PASSWORD != ConfirmPass || m.INSTITUTION_ID == 0 || (m.ROLE == AccountType.PARENT && ChildEmail == null);
 	}
 	private async void Submit()
 	{
-		if (ValidModel(Model)) resultMessage = "Please enter valid credentials!";
+		// fields are filled incorrectly
+		if (InvalidModel(Model))
+		{
+			ResultMessage = "Please enter valid credentials!";
+		}
+		// not a parent registering, which requires extra steps
+		else if (Model.ROLE != AccountType.PARENT)
+		{
+			Model.CHILD_ID = -1;
+			if ((await App.EdUnityRepo.AddUser(Model)))
+			{
+				ResultMessage = "Your credentials will be verified and authorized shortly.";
+				StateHasChanged();
+				await Task.Delay(2500);
+				NavigationManager.NavigateTo("/login");
+			}
+			else
+			{
+				ResultMessage = "Account already exists!";
+			}
+		}
+		// parent registering
 		else
 		{
-			resultMessage = "Your credentials will be verified and authorized shortly. Please check back in 24-72 hours!";
-			StateHasChanged();
-			await Task.Delay(2500);
-			NavigationManager.NavigateTo("/login");
+			User Child = await App.EdUnityRepo.GetUser(ChildEmail);
+			// student account does not exist on this email
+			if (Child == null || Child.ROLE != 0)
+			{
+				ResultMessage = "Child email not found!";
+			}
+			// student account exists
+			else
+			{
+				Model.CHILD_ID = Child.ID;
+				Model.INSTITUTION_ID = Child.INSTITUTION_ID;
+				if ((await App.EdUnityRepo.AddUser(Model)))
+				{
+					ResultMessage = "Your credentials will be verified and authorized shortly.";
+					StateHasChanged();
+					await Task.Delay(2500);
+					NavigationManager.NavigateTo("/login");
+				}
+				else
+				{
+					ResultMessage = "Account already exists!";
+				}
+			}
 		}
 		StateHasChanged();
+	}
+	private async Task Autocomplete(ChangeEventArgs e)
+	{
+		string name = e.Value.ToString();
+		AutocompleteResults = await App.EdUnityRepo.SuggestInstitutions(name.ToUpper());
+		ShowAutocompleteResults = AutocompleteResults.Count > 0;
+	}
+	private void SetSelectedInstitution(Institution school)
+	{
+		Model.INSTITUTION_ID = school.ID;
+		InstitutionName = school.NAME;
+		ShowAutocompleteResults = false;
 	}
 }

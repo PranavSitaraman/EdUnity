@@ -238,13 +238,13 @@
 			}
 		}
 	}
-	private bool ValidModel(Event m)
+	private bool InvalidModel(Event m)
 	{
 		return m.title == null || m.description == null;
 	}
 	private void Submit()
 	{
-		if (ValidModel(Model)) return;
+		if (InvalidModel(Model)) return;
 		selectedDay.ScheduledEvents.Add(Model);
 	}
 }

@@ -1,17 +1,9 @@
 ﻿@page "/login"
 @inject NavigationManager NavigationManager;
+
 @using System.Net
-@using Microsoft.Extensions.Primitives
-@using Newtonsoft.Json
-@code
-{
-	public class LoginModel
-	{
-		public string Email { get; set; }
-		public string Password { get; set; }
-		public bool ModelsIsNull() { return Email == null || Password == null; }
-	}
-}
+@using EdUnity.Data
+
 <section />
 <section>
 	<form class="form-outer">
@@ -31,14 +23,14 @@
 				</div>
 			</div>
 			<ValidationSummary />
-			@if (!String.IsNullOrEmpty(resultMessage))
+			@if (!String.IsNullOrEmpty(ResultMessage))
 			{
-				<div class="form-error-message">@resultMessage</div>
+				<div class="form-error-message">@ResultMessage</div>
 			}
 			<div class="row mb-4 pt-4">
 				<div class="col d-flex justify-content-center">
 					<div class="form-check">
-						<input class="form-check-input" type="checkbox" checked />
+						<InputCheckbox class="form-check-input" type="checkbox" checked @bind-Value=SaveLogin />
 					</div>
 					<label class="form-check-label">Remember me</label>
 				</div>
@@ -52,42 +44,41 @@
 		</EditForm>
 	</form>
 </section>
-<section/>
+<section />
+
 @code
 {
 	private LoginModel Model = new();
-	private string resultMessage;
-	private int poop;
-	private List<Tuple<string, string>> logins = new();
-	protected async override void OnInitialized()
+	private string ResultMessage;
+	private bool SaveLogin { get; set; }
+
+	// form login model
+	public class LoginModel
 	{
-		await ReadUsers();
-		poop = logins.Count();
+		public string Email { get; set; }
+		public string Password { get; set; }
+		public bool InvalidModel() { return Email == null || Password == null; }
 	}
-	private async Task ReadUsers()
-	{
-		using var stream = await FileSystem.OpenAppPackageFileAsync("users.json");
-		using (var reader = new StreamReader(stream))
-		{
-			var json = await reader.ReadToEndAsync();
-			var users = JsonConvert.DeserializeObject<List<EdUnity.Pages.Register.UserModel>>(json);
-			foreach (var u in users)
-			{
-				logins.Add(new Tuple<string, string>(u.Email, u.Password));
-			}
-		}
-	}
+
+	// attempt to log into account
 	private async void Submit()
 	{
-		if (Model.ModelsIsNull()) resultMessage = "Please enter valid credentials!";
-		else if (logins.Contains(new Tuple<string, string>(Model.Email, Model.Password)))
+		User user = await App.EdUnityRepo.GetUser(Model.Email);
+		if (Model.InvalidModel()) ResultMessage = "Please enter valid credentials!";
+		else if (user != null && Model.Password == user.PASSWORD)
 		{
-			resultMessage = "Login successful!";
+			Preferences.Set("SaveLogin", SaveLogin);
+			Preferences.Set("ID", user.ID);
+			await App.EdUnityRepo.SetUser(user.ID);
+			ResultMessage = "Login successful!";
 			StateHasChanged();
 			await Task.Delay(2000);
 			NavigationManager.NavigateTo("/home", forceLoad: true);
 		}
-		else resultMessage = "Invalid credentials!";
+		else
+		{
+			ResultMessage = "Invalid credentials!";
+		}
 		StateHasChanged();
 	}
 }

@@ -4,6 +4,7 @@
 @using Microsoft.Extensions.Primitives
 @using System.ComponentModel.DataAnnotations
 @using System.Net.Http.Headers
+
 @code
 {
 	public class PasswordModel
@@ -18,7 +19,7 @@
 	}
 }
 <NavMenu Title="@Title" />
-<section/>
+<section />
 <section>
 	<div class="form-outer">
 		<img src="img/edunity-transparent.png" />
@@ -53,7 +54,7 @@
 		</EditForm>
 		<div style="margin-top:3%" class="col d-flex justify-content-center">
 			<a href="/profile" class="btn my-4" style="margin-right:5%;margin-left:5%;background-color: #a62639; color: white; border: none;">← Back</a>
-			<a href="/login" class="btn my-4" style="margin-right:5%;margin-left:5%;background-color: #a62639; color: white; border: none;">Log Out</a>
+			<button @onclick="Logout" class="btn my-4" style="margin-right:5%;margin-left:5%;background-color: #a62639; color: white; border: none;">Log Out</button>
 		</div>
 	</div>
 </section>
@@ -66,14 +67,20 @@
 	private async void Submit()
 	{
 		if (Model.ModelsIsNull()) resultMessage = "Please enter valid credentials!";
-		else if (Model.OldPassword.Equals("fbla") && Model.NewPassword.Equals(Model.PasswordConfirm))
+		else if (Model.OldPassword.Equals(App.EdUnityRepo.GetCurrentUser().PASSWORD) && Model.NewPassword.Equals(Model.PasswordConfirm))
 		{
-			resultMessage = "Your credentials will be updated shortly. Please check back in 24-72 hours!";
+			await App.EdUnityRepo.UpdateUser(Model.NewPassword);
+			resultMessage = "Your password has been updated!";
 			StateHasChanged();
-			await Task.Delay(2500);
-			NavigationManager.NavigateTo("/login");
 		}
 		else resultMessage = "Please enter valid credentials!";
 		StateHasChanged();
+	}
+	public async void Logout()
+	{
+		Preferences.Remove("SaveLogin");
+		Preferences.Remove("ID");
+		await Task.Delay(2500);
+		NavigationManager.NavigateTo("/login");
 	}
 }

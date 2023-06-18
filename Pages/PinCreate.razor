@@ -72,7 +72,7 @@
             await Js.InvokeVoidAsync("placePin", _model);
             _model = new();
             await Task.Delay(2000);
-            Close();
+            await Close();
         }
         StateHasChanged();
     }

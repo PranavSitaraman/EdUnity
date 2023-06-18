@@ -1,51 +1,22 @@
 ﻿@page "/calendar"
-@using System.Globalization
-@using System.Collections.Generic
-@using System.IO
-@using Newtonsoft.Json
+
 @using EdUnity.Data
-@using System.Net
-@using Microsoft.Extensions.Primitives
-@using System.ComponentModel.DataAnnotations
-@using System.Net.Http.Headers
-@code
-{
-	public class Day
-	{
-		public int day { get; set; }
-		public DateTime date;
-		public bool IsCurrentMonth { get; set; }
-		public List<Event> ScheduledEvents { get; set; }
-	}
-	public class Week
-	{
-		public List<Day> Days { get; set; } = new List<Day>();
-	}
-	public class Event
-	{
-		public string title { get; set; }
-		public string description { get; set; }
-		public DateTime start { get; set; }
-		public DateTime end { get; set; }
-		public EventType type { get; set; }
-	}
-	public enum EventType
-	{
-		Holidays,
-		Clubs,
-		Athletics,
-		Celebrations
-	}
-}
+@using Blazorise
+@using Blazorise.Bootstrap
+
 <NavMenu Title="@Title" />
-<section/>
+<section />
+@* main calendar *@
 <section>
+	@* navigation between months *@
 	<div class="d-flex justify-content-center" style="padding-bottom: 1em">
 		<button class="btn month-nav" @onclick="PrevMonth">&lt;</button>
 		<h3 class="align-middle">@CurrentMonth.ToString("MMMM yyyy")</h3>
 		<button class="btn month-nav" @onclick="NextMonth">&gt;</button>
 	</div>
+	@* table for each day *@
 	<table class="table">
+		@* days of the week *@
 		<thead>
 			<tr>
 				@foreach (var dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
@@ -54,18 +25,21 @@
 				}
 			</tr>
 		</thead>
+		@* days of the month *@
 		<tbody>
 			@foreach (var week in Weeks)
 			{
 				<tr>
 					@foreach (var day in week.Days)
 					{
-						<td scope="row" @onclick="()=>ToggleDay(day)" style="background-color:@(day.Equals(selectedDay) ? "rgba(219, 50, 77, 0.2)" : "")">
+						@* select/unselect each day  *@
+						<td scope="row" @onclick="()=>ToggleDay(day)" style="background-color:@(day.Equals(SelectedDay) ? "rgba(219, 50, 77, 0.2)" : "")">
 							<div class="@(day.IsCurrentMonth ? "day-header" : "text-muted")">@day.day</div>
 							<ul class="d-flex flex-row">
+								@* show all events as colored circles for each day *@
 								@foreach (var e in GetEvents(day.date))
 								{
-									<li class="event-dot" style="background-color:@GetType(e)"></li>
+									<li class="event-dot" style="background-color:@GetColor(e)"></li>
 								}
 							</ul>
 						</td>
@@ -74,32 +48,37 @@
 			}
 		</tbody>
 	</table>
-	@if (selectedDay != null)
+
+	@* bottom display to show events for selected day *@
+	@if (SelectedDay != null)
 	{
 		<div class="selected container-fluid">
 			<div class="row">
-				<h4 class="text-center">Events on <strong>@(selectedDayTitle)</strong></h4>
+				<h4 class="text-center">Events on <strong>@(SelectedDayTitle)</strong></h4>
 			</div>
 			<div class="row my-3">
+				@* show list of events for selected day *@
 				<div class="col container-fluid">
 					<ul class="list-group">
-						@foreach (var e in GetEvents(selectedDay.date))
+						@foreach (var e in GetEvents(SelectedDay.date))
 						{
-							<li class="btn btn-dark list-group-item" style="background-color:@GetType(e)" @onclick="()=>SetEvent(e)">@e.title</li>
+							<li class="btn btn-dark list-group-item" style="background-color:@GetColor(e)" @onclick="()=>SetEvent(e)">@e.TITLE</li>
 						}
 					</ul>
 				</div>
-				@if (@selectedEvent != null)
+				@* show selected event information on right *@
+				@if (SelectedEvent != null)
 				{
 					<div class="col container-fluid">
 						<div class="row container-fluid">
-							<h4><strong>@selectedEvent.title</strong></h4>
-							<h6>@selectedEvent.description</h6>
-							<h6><strong>Start: </strong>@selectedEvent.start.ToString("hh:mm tt")</h6>
-							<h6><strong>End: </strong>@selectedEvent.end.ToString("hh:mm tt")</h6>
+							<h4><strong>@SelectedEvent.TITLE</strong></h4>
+							<h6>@SelectedEvent.DESCRIPTION</h6>
+							<h6><strong>Start: </strong>@DateTime.Parse(SelectedEvent.START).ToString("M/d/yy h:mm tt")</h6>
+							<h6><strong>End: </strong>@DateTime.Parse(SelectedEvent.END).ToString("M/d/yy h:mm tt")</h6>
 						</div>
 					</div>
 				}
+				@*leave right side empty when not selected*@
 				else
 				{
 					<div class="col container-fluid">
@@ -113,31 +92,128 @@
 			<div class="row justify-content-center mb-4">
 				<button class="btn active w-25" @onclick="OpenPopup">Add Event</button>
 			</div>
-			<br/>
-			<br/>
+			<br />
+			<br />
+		</div>
+	}
+
+	@* popup menu to create new event *@
+	@if (PopupDisplay)
+	{
+		<div class="modal-overlay" @onclick="ClosePopup"></div>
+		<div class="modal d-flex align-items-center justify-content-center">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title text-center">Create Event</h3>
+					<button type="button" class="btn-close" @onclick="ClosePopup"></button>
+				</div>
+				@* new event content *@
+				<div class="modal-body" style="padding-top:0">
+					<EditForm Model="@Model" OnValidSubmit="@Submit">
+						<DataAnnotationsValidator />
+						<div>
+							<label class="form-label">Title</label>
+							<div>
+								<InputText type="text" class="form-control" placeholder="An Event" @bind-Value="Model.TITLE" />
+							</div>
+						</div>
+						<div>
+							<label class="form-label">Category</label>
+							<div>
+								<InputSelectEnum class="form-select" @bind-Value="Model.TYPE" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<label class="form-label">Start Date</label>
+								<div>
+									<InputDate class="form-control" @bind-Value="StartDate" />
+								</div>
+							</div>
+							<div class="col">
+								<label class="form-label">End Date</label>
+								<div>
+									<InputDate class="form-control" @bind-Value="EndDate" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<label class="form-label">Start Time</label>
+								<div>
+									<TimePicker TValue="TimeSpan?" Inline @bind-Value="StartTime"/>
+								</div>
+							</div>
+							<div class="col">
+								<label class="form-label">End Time</label>
+								<div>
+									<TimePicker TValue="TimeSpan?" Inline @bind-Value="EndTime" />
+								</div>
+							</div>
+						</div>
+
+						<div>
+							<label class="form-label">Description</label>
+							<div>
+								<InputTextArea type="text" class="form-control" @bind-Value="Model.DESCRIPTION" />
+							</div>
+						</div>
+						<Microsoft.AspNetCore.Components.Forms.ValidationSummary />
+						<div class="col d-flex justify-content-center">
+							<button type="submit" class="btn w-25" style="color:white; background-color:#511C29;">Create</button>
+						</div>
+					</EditForm>
+				</div>
+			</div>
 		</div>
 	}
 </section>
-<section/>
+<section />
 @code
 {
+	// TO-DO: ADD TIME SELECTIONS FOR CREATE EVENT
+
 	private string Title = "Calendar";
+
+	// static calendar data
 	private DateTime CurrentMonth = DateTime.Today;
 	private List<Week> Weeks = new();
+	private List<Event> Events;
+
+	// calendar view
 	private bool DayExpand;
-	private Day selectedDay;
-	private Event selectedEvent;
-	private Dictionary<string, List<Event>> allEvents;
-	private string selectedDayTitle;
-	private string popupDisplay = "none";
+	private Day SelectedDay;
+	private Event SelectedEvent;
+	private string SelectedDayTitle;
+	private string CollapseDay => DayExpand ? "selected" : "collapse";
+
+	// add event
+	private bool PopupDisplay = false;
 	private Event Model = new();
-	private string collapseDay => DayExpand ? "selected" : "collapse";
+	private DateTime StartDate = DateTime.Today, EndDate = DateTime.Today;
+	private TimeSpan? StartTime = TimeSpan.Zero, EndTime = TimeSpan.Zero;
+
+	// each day (square) on calendar
+	public class Day
+	{
+		public int day { get; set; }
+		public DateTime date;
+		public bool IsCurrentMonth { get; set; }
+	}
+
+	// 7 days -> 1 week
+	public class Week
+	{
+		public List<Day> Days { get; set; } = new List<Day>();
+	}
+
+	// navigation
 	protected async override void OnInitialized()
 	{
 		DayExpand = false;
-		selectedDay = null;
-		selectedEvent = null;
-		await ReadEvents();
+		SelectedDay = null;
+		SelectedEvent = null;
+		await LoadEvents();
 		base.OnInitialized();
 		UpdateWeeks();
 		StateHasChanged();
@@ -154,30 +230,73 @@
 		CurrentMonth = CurrentMonth.AddMonths(1);
 		UpdateWeeks();
 	}
-	private string GetType(Event e)
+	private void ToggleDay(Day day)
 	{
-		switch (e.type)
+		if (day == null)
 		{
-			case EventType.Holidays:
-				return "#936D06";
-			case EventType.Clubs:
-				return "#0624B6";
-			case EventType.Athletics:
-				return "#107B05";
-			case EventType.Celebrations:
-				return "#986525";
-			default:
-				return "";
+			DayExpand = false;
+			SelectedDay = null;
+			SelectedDayTitle = null;
+			SelectedEvent = null;
+		}
+		else
+		{
+			if (day == SelectedDay)
+			{
+				SelectedDay = null;
+				DayExpand = false;
+				SelectedEvent = null;
+			}
+			else
+			{
+				SelectedDay = day;
+				DayExpand = true;
+				SelectedDayTitle = SelectedDay.date.ToString("dddd, MMMM d");
+				if (GetEvents(SelectedDay.date).Count() > 0) SelectedEvent = GetEvents(SelectedDay.date)[0];
+				else SelectedEvent = null;
+			}
 		}
 	}
-	private async Task ReadEvents()
+
+	// add event menu
+	private void OpenPopup()
 	{
-		using var stream = await FileSystem.OpenAppPackageFileAsync("events.json");
-		using (var reader = new StreamReader(stream))
+		StartDate = SelectedDay.date;
+		EndDate = SelectedDay.date;
+		PopupDisplay = true;
+	}
+	private void ClosePopup()
+	{
+		PopupDisplay = false;
+	}
+	private async Task Submit()
+	{
+		if (Model.TITLE == null) return;
+		// TO-DO: FIX TIME ADDING TO EVENTS
+		Model.START = StartDate.Add(StartTime.Value).ToString();
+		Model.END = EndDate.Add(EndTime.Value).ToString();
+		Model.CREATOR_ID = Preferences.Get("ID", -1);
+		await App.EdUnityRepo.AddEvent(Model);
+		await LoadEvents();
+		ClosePopup();
+	}
+
+	// calendar content management
+	private async Task LoadEvents()
+	{
+		Events = await App.EdUnityRepo.GetEvents(CurrentMonth);
+	}
+	private List<Event> GetEvents(DateTime date)
+	{
+		List<Event> today = new();
+		foreach (Event e in Events)
 		{
-			var json = await reader.ReadToEndAsync();
-			allEvents = JsonConvert.DeserializeObject<Dictionary<string, List<Event>>>(json);
+			if (date.Date >= DateTime.Parse(e.START).Date && date.Date < DateTime.Parse(e.END).Date.AddDays(1))
+			{
+				today.Add(e);
+			}
 		}
+		return today;
 	}
 	private void UpdateWeeks()
 	{
@@ -189,67 +308,45 @@
 		for (var date = start; date <= end; date = date.AddDays(1))
 		{
 			if (date.DayOfWeek == DayOfWeek.Sunday) weeks.Add(new Week());
-			weeks.Last().Days.Add(new Day {
-				date = date,
-				day = date.Day,
-				IsCurrentMonth = date.Month == CurrentMonth.Month,
-				ScheduledEvents = GetEvents(date)
-			});
+			weeks.Last().Days.Add(new Day
+				{
+					date = date,
+					day = date.Day,
+					IsCurrentMonth = date.Month == CurrentMonth.Month,
+				});
 		}
 		Weeks = weeks;
 	}
-	private void OpenPopup()
+	private string GetColor(Event e)
 	{
-		popupDisplay = "block";
+		switch (e.TYPE)
+		{
+			case EventType.Academic:
+				return "#FF5733";
+			case EventType.Athletics:
+				return "#3366FF";
+			case EventType.Celebration:
+				return "#FFC300";
+			case EventType.Ceremony:
+				return "#9933CC";
+			case EventType.Clubs:
+				return "#33CC66";
+			case EventType.Holiday:
+				return "#1C415A";
+			case EventType.Meeting:
+				return "#9D6868";
+			case EventType.Trip:
+				return "#FF3366";
+			case EventType.Other:
+				return "#666666";
+			default:
+				return "";
+		}
 	}
-	private void ClosePopup()
-	{
-		popupDisplay = "none";
-	}
-	private List<Event> GetEvents(DateTime date)
-	{
-		List<Event> today = new();
-		foreach (Event e in allEvents[date.Month.ToString()]) if (date.Day >= e.start.Day && date.Day <= e.end.Day) today.Add(e);
-		return today;
-	}
+
+	// mutators
 	private void SetEvent(Event e)
 	{
-		selectedEvent = e;
-	}
-	private void ToggleDay(Day day)
-	{
-		if (day == null)
-		{
-			DayExpand = false;
-			selectedDay = null;
-			selectedDayTitle = null;
-			selectedEvent = null;
-		}
-		else
-		{
-			if (day == selectedDay)
-			{
-				selectedDay = null;
-				DayExpand = false;
-				selectedEvent = null;
-			}
-			else
-			{
-				selectedDay = day;
-				DayExpand = true;
-				selectedDayTitle = selectedDay.date.ToString("dddd, MMMM d");
-				if (selectedDay.ScheduledEvents.Count() > 0) selectedEvent = selectedDay.ScheduledEvents[0];
-				else selectedEvent = null;
-			}
-		}
-	}
-	private bool ValidModel(Event m)
-	{
-		return m.title == null || m.description == null;
-	}
-	private void Submit()
-	{
-		if (ValidModel(Model)) return;
-		selectedDay.ScheduledEvents.Add(Model);
+		SelectedEvent = e;
 	}
 }

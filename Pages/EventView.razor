@@ -30,18 +30,18 @@
     private int _height { get; set; } = 40;
     private string _iconName { get; set; } = "chevron-up-outline";
     public bool signup;
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         signup = false;
         _modelReady = true;
         StateHasChanged();
     }
-    private async void Signup()
+    private void Signup()
     {
         signup = true;
         StateHasChanged();
     }
-    private async void Unsignup()
+    private void Unsignup()
     {
         signup = false;
         StateHasChanged();

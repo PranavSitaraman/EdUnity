@@ -3,21 +3,22 @@
 <section/>
 <section>
     <div style="margin-bottom:2em" class="d-flex justify-content-center">
+        @* TO-DO: ALLOW CUSTOM PROFILE PICTURE UPLOAD *@
         <img style="width:15%;aspect-ratio:1;border-radius:50%" src="img/edisonacademy.jpg" />
     </div>
     <div style="margin-bottom:1em" class="d-flex justify-content-center">
         <h4>
-            <b>Name:</b> FBLA
+            <b>Name:</b> @App.EdUnityRepo.GetCurrentUser().FIRST_NAME @App.EdUnityRepo.GetCurrentUser().LAST_NAME
         </h4>
     </div>
     <div style="margin-bottom:1em" class="d-flex justify-content-center">
         <h4>
-            <b>Type:</b> Administrator
+            <b>Type:</b> @App.EdUnityRepo.GetCurrentUser().ROLE.ToString()
         </h4>
     </div>
     <div style="margin-bottom:1em;" class="d-flex justify-content-center">
         <h4>
-            <b>Affiliation:</b> Edison Academy Magnet School
+            <b>Institution:</b> @App.EdUnityRepo.GetCurrentInstitution().NAME
         </h4>
     </div>
     <div style="margin-top:2em;margin-bottom:1em" class="d-flex justify-content-center">
