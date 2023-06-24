@@ -69,7 +69,7 @@
 		{
 			Preferences.Set("SaveLogin", SaveLogin);
 			Preferences.Set("ID", user.ID);
-			await App.EdUnityRepo.SetUser(user.ID);
+			bool status = await App.EdUnityRepo.SetUser(user.ID);
 			ResultMessage = "Login successful!";
 			StateHasChanged();
 			await Task.Delay(2000);

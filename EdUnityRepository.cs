@@ -1,6 +1,6 @@
 ﻿using SQLite;
 using EdUnity.Data;
-using System.Xml.Linq;
+using System.Data;
 
 namespace EdUnity
 {
@@ -25,6 +25,9 @@ namespace EdUnity
 			}
 			conn = new SQLiteAsyncConnection(_dbPath);
 			await conn.CreateTablesAsync<User, Event, Institution>();
+			/*await AddData.CreateUsers(conn);
+			await AddData.CreateEvents(conn);
+			await AddData.CreateSchools(conn);*/
 		}
 
 		// users table operations
@@ -75,6 +78,12 @@ namespace EdUnity
 		public User GetCurrentUser()
 		{
 			return user;
+		}
+		// get user count
+		public async Task<int> GetUserCount()
+		{
+			await Init();
+			return await conn.Table<User>().CountAsync();
 		}
 
 		// events table operations

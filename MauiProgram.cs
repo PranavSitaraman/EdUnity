@@ -18,8 +18,8 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 			})
 			.UseMauiCommunityToolkit();
-		string dbPath = System.IO.Path.Combine(FileSystem.AppDataDirectory, "edunity.db3");
-		builder.Services.AddSingleton<EdUnityRepository>(s => ActivatorUtilities.CreateInstance<EdUnityRepository>(s, dbPath));
+		string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "edunity.db3");
+        builder.Services.AddSingleton<EdUnityRepository>(s => ActivatorUtilities.CreateInstance<EdUnityRepository>(s, dbPath));
 		builder.Services.AddMauiBlazorWebView();
 		builder.Services.AddBlazoredModal();
 		builder.Services.AddBlazorise(options =>

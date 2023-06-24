@@ -14,10 +14,12 @@ namespace EdUnity.Data
         public PinKind Kind { get; set; }
 
     }
+    
     public enum PinKind
     {
         [Display(Name="Car")] Car
     }
+
     public enum Grade
     {
         [Display(Name = "Freshman")] Freshman,

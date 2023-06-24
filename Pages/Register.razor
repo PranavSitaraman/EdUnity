@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager;
 
 @using System.Net
+@using System.IO
 @using EdUnity.Data
 
 <section>
@@ -118,6 +119,7 @@
 			if ((await App.EdUnityRepo.AddUser(Model)))
 			{
 				ResultMessage = "Your credentials will be verified and authorized shortly.";
+				File.Copy("img/users/default.jpg", "img/users/" + ((await App.EdUnityRepo.GetUserCount()) + 1) + ".jpg");
 				StateHasChanged();
 				await Task.Delay(2500);
 				NavigationManager.NavigateTo("/login");
@@ -144,6 +146,7 @@
 				if ((await App.EdUnityRepo.AddUser(Model)))
 				{
 					ResultMessage = "Your credentials will be verified and authorized shortly.";
+					File.Copy("img/users/default.jpg", "img/users/" + ((await App.EdUnityRepo.GetUserCount()) + 1) + ".jpg");
 					StateHasChanged();
 					await Task.Delay(2500);
 					NavigationManager.NavigateTo("/login");
