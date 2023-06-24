@@ -14,7 +14,7 @@
 };
 var PinKind;
 (function (PinKind) { PinKind[PinKind["Car"] = 0] = "Car"; })(PinKind || (PinKind = {}));
-let map, meMarker;
+let map, meMarker, homeMarker;
 let pinMarkers = {};
 let pins = {};
 let mousedUp;
@@ -59,15 +59,28 @@ function initialize(netObject)
     map.addListener('mouseup', () => mousedUp = true);
     map.addListener('dragstart', () => mousedUp = true);
     let pos = { lat: latLng.lat(), lng: latLng.lng() };
+    latLng = new google.maps.LatLng(40.515197, -74.363796);
+    let pos2 = { lat: latLng.lat(), lng: latLng.lng() };
     meMarker = new google.maps.Marker({
         position: pos,
         map: map,
         icon: meIcon
     });
+    homeMarker = new google.maps.Marker({
+        position: pos2,
+        map: map,
+        icon: homeIcon
+    });
 }
 function initResources() {
     meIcon = {
         url: "/img/man.svg",
+        scaledSize: new google.maps.Size(meSize, meSize),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(meSize / 2, meSize / 2)
+    };
+    homeIcon = {
+        url: "/img/house.png",
         scaledSize: new google.maps.Size(meSize, meSize),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(meSize / 2, meSize / 2)
@@ -89,8 +102,10 @@ function initResources() {
             this.position = marker.getPosition();
             let closeContainer = document.createElement('div');
             closeContainer.classList.add("popup-bubble");
-            const closeIcon = document.createElement("ion-icon");
-            closeIcon["name"] = "close";
+            const closeIcon = document.createElement("div");
+            const closeIcon2 = document.createElement("span");
+            closeIcon2.setAttribute('class', 'fa fa-solid fa-circle-xmark');
+            closeIcon.appendChild(closeIcon2);
             closeIcon.onclick = () => { this.setMap(null); };
             closeContainer.appendChild(content);
             closeContainer.appendChild(closeIcon);
@@ -179,5 +194,27 @@ function removeLongPressIndicator()
     {
         longPressIndicator.setMap(null);
         longPressIndicator = undefined;
+    }
+}
+let home;
+function dropoff() {
+    let pos = { lat: 40.515197, lng: -74.363796 };
+    if (home == undefined) {
+        home = new google.maps.Circle({
+            center: pos,
+            radius: 4000,
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            strokeWeight: 3,
+            fillColor: "#FF0000",
+            fillOpacity: 0.35,
+            map: map
+        });
+    }
+}
+function pickup() {
+    if (home != undefined) {
+        home.setMap(null);
+        home = undefined;
     }
 }

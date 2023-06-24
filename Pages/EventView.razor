@@ -3,9 +3,21 @@
 {
     <div class="body-view" style="height: @(_height)vh;">
         <div class="control-bar">
-            <ion-icon name="bookmark" class="save-icon"></ion-icon>
-            <ion-icon name="@_iconName" class="expand-icon" @onclick="Resize"></ion-icon>
-            <ion-icon class="close-icon" name="close-outline" @onclick="CloseCallback"></ion-icon>
+            @if (_height == 40)
+            {
+                <div @onclick="Resize">
+                    <span class="fa fa-solid fa-arrow-up" aria-hidden="true" />
+                </div>
+            }
+            else
+            {
+                <div @onclick="Resize">
+                    <span class="fa fa-solid fa-arrow-down" aria-hidden="true" />
+                </div>
+            }
+            <div @onclick="CloseCallback">
+                <span class="fa fa-solid fa-circle-xmark" aria-hidden="true" />
+            </div>
         </div>
         <div class="post-view">
             <h1>@Loc.Name</h1>
