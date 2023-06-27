@@ -17,11 +17,32 @@
 .card-text {
     font-size: 0.9rem;
     color: #777;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* Number of lines to show before truncation */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.social {
+    margin-left: 5%;
+    margin-right: 5%;
 }
 
 .social-icon {
     color: #a62639;
     padding-bottom: 10px;
+    width: 30px;
+    height: 30px;
+}
+
+.post-button {
+    background-color: #a62639;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    margin: 5px;
 }
 
 .expanded-image-container {
@@ -43,26 +64,31 @@
     cursor: pointer;
 }
 
-.upload-container {
+.modal {
+    min-width: 300px;
+    max-width: 500px;
     display: flex;
     justify-content: center;
-    margin-top: 20px;
-}
-
-.upload-menu {
-    position: absolute;
-    top: 40px;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
     right: 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    padding: 10px;
+    bottom: 0;
+    margin: auto;
     z-index: 9999;
 }
 
-.upload-menu-item {
-    cursor: pointer;
-    padding: 5px;
-    margin-bottom: 5px;
+.modal-body * {
+    margin-top: 7px;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
 }

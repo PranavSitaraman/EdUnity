@@ -1,70 +1,154 @@
 ﻿@page "/photos"
+
+@using EdUnity.Data
+@using System.IO;
+@using System.Threading.Tasks;
+@using System.Reflection;
+
 <NavMenu Title="@Title" />
-
 <section>
-    @*TO-DO: ADD UPLOAD MENU FOR NEW PHOTOS*@
+	<div class="d-flex justify-content-center" style="margin-top:30px">
+		<a href="https://twitter.com/MCVTS_ACE" class="btn mb-4 social">
+			<span class="fa fa-solid fa-twitter fa-2x social-icon" aria-hidden="true"></span>
+		</a>
+		<a href="https://www.instagram.com/edisonacademymagnetschool/" class="btn mb-4 social">
+			<span class="fa fa-solid fa-instagram fa-2x social-icon" aria-hidden="true"></span>
+		</a>
+		<a href="https://www.facebook.com/groups/1380582742219575" class="btn mb-4 social">
+			<span class="fa fa-solid fa-facebook fa-2x social-icon" aria-hidden="true"></span>
+		</a>
+		<a class="btn mb-4 social post-button" @onclick="OpenPopup">Post!</a>
+	</div>
 
-    <div class="d-flex flex-wrap justify-content-center">
-        @foreach (var photo in PhotoList)
-        {
-            <div class="card" style="width: 18rem;">
-                <img src="@photo.ImagePath" class="card-img-top" alt="@photo.Title" @onclick="(() => ExpandImage(photo.ImagePath))">
-                <div class="card-body">
-                    <h5 class="card-title">@photo.Title</h5>
-                    <p class="card-text">@photo.Description</p>
-                </div>
-            </div>
-        }
-    </div>
-    <div style="margin-top:20px; padding-bottom: 30px;" class="d-flex justify-content-center">
-        <a href="https://twitter.com/MCVTS_ACE" style="margin-left:5%;margin-right:5%;width:100px;height:100px" class="btn mb-4">
-            <span class="fa fa-solid fa-twitter fa-2x social-icon" aria-hidden="true"></span>
-        </a>
-        <a href="https://www.instagram.com/edisonacademymagnetschool/" style="margin-left:5%;margin-right:5%;width:100px;height:100px" class="btn mb-4">
-            <span class="fa fa-solid fa-instagram fa-2x social-icon" aria-hidden="true"></span>
-        </a>
-        <a href="https://www.facebook.com/groups/1380582742219575" style="margin-left:5%;margin-right:5%;width:100px;height:100px" class="btn mb-4">
-            <span class="fa fa-solid fa-facebook fa-2x social-icon" aria-hidden="true"></span>
-        </a>
-    </div>
+	<div class="d-flex flex-wrap justify-content-center" style="margin-bottom: 120px">
+		@foreach (var photo in PhotoList)
+		{
+			<div class="card" style="width: 18rem;">
+				<img src="@photo.PATH" class="card-img-top" alt="@photo.TITLE" @onclick="(() => ExpandImage(photo.PATH))">
+				<div class="card-body">
+					<h5 class="card-title">@photo.TITLE</h5>
+					<p class="card-text">@photo.DESCRIPTION</p>
+				</div>
+			</div>
+		}
+	</div>
 
-    @if (IsImageExpanded)
-    {
-        <div class="expanded-image-container">
-            <img src="@ExpandedImagePath" class="expanded-image" alt="Expanded Image" @onclick="CollapseImage" />
-        </div>
-    }
+	@if (IsImageExpanded)
+	{
+		<div class="expanded-image-container">
+			<img src="@ExpandedImagePath" class="expanded-image" alt="Expanded Image" @onclick="CollapseImage" />
+		</div>
+	}
+
+	@if (PopupDisplay)
+	{
+		<div class="modal-overlay" @onclick="ClosePopup"></div>
+		<div class="modal d-flex align-items-center justify-content-center">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title text-center">Create Event</h3>
+					<button type="button" class="btn-close" @onclick="ClosePopup"></button>
+				</div>
+				@* new event content *@
+				<div class="modal-body" style="padding-top:0">
+					<EditForm Model="@Model" OnValidSubmit="@Submit">
+						<DataAnnotationsValidator />
+						<div>
+							<label class="form-label">Title</label>
+							<div>
+								<InputText type="text" class="form-control" placeholder="Title" @bind-Value="Model.TITLE" />
+							</div>
+						</div>
+						<div>
+							<label class="form-label">Description</label>
+							<div>
+								<InputTextArea type="text" class="form-control" @bind-Value="Model.DESCRIPTION" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="imageInput">Image</label>
+							<InputFile id="imageInput" class="form-control" OnChange="HandleImageChange" />
+						</div>
+						<Microsoft.AspNetCore.Components.Forms.ValidationSummary />
+						<div class="col d-flex justify-content-center">
+							<button type="submit" class="btn w-25" style="color:white; background-color:#511C29;">Post</button>
+						</div>
+					</EditForm>
+				</div>
+			</div>
+		</div>
+	}
 </section>
 
 @code {
-    private string Title = "Photos";
-    private string ExpandedImagePath;
-    private bool IsImageExpanded = false;
+	private string Title = "Photos";
+	private string ExpandedImagePath;
+	private bool IsImageExpanded = false;
+	private List<Photo> PhotoList = new();
+	private bool PopupDisplay = false;
+	private Photo Model = new();
+	private IBrowserFile ImageFile { get; set; }
 
-    private List<Photo> PhotoList = new List<Photo>
-    {
-        new Photo { ImagePath = "img/ambassadors.jpg", Title = "RWJ Safety Ambassadors", Description = "Our Safety Ambassadors taught the students helmet safety, safety in & around cars, roads/traffic and safety on stairs." },
-        new Photo { ImagePath = "img/dance.jpg", Title = "Winter Ball", Description = "Edison Academy Magnet School's Senior Class held their Winter Formal! Everyone dressed to impress and had a blast dancing the night away!" },
-        new Photo { ImagePath = "img/scioly.jpg", Title = "Science Olympiad", Description = "Science Olympiad team competed in the Union College Regional Tournament. Fifteen team members participated in 12 different events against teams from across Central Jersey. The team ranked 7th overall, qualifying for the state competition." },
-        new Photo { ImagePath = "img/un.jpg", Title = "Model UN", Description = "Students participated in the second annual MCA Model United Nations Conference held in Middlesex College's Crabiel Hall. During the conference, students participated in 3 exciting committees on topics ranging from the social and civil unrest in the Central African Republic to the Titan takeover of Olympus." },
-        new Photo { ImagePath = "img/njit.jpg", Title = "NJIT Tour", Description = "Some quick example text to build on the card title and make up the bulk of the card's content." }
-    };
+	protected async override void OnInitialized()
+	{
+		await LoadPhotos();
+		base.OnInitialized();
+		StateHasChanged();
+	}
+	private void ExpandImage(string imagePath)
+	{
+		ExpandedImagePath = imagePath;
+		IsImageExpanded = true;
+	}
+	private void CollapseImage()
+	{
+		IsImageExpanded = false;
+	}
+	private async Task LoadPhotos()
+	{
+		PhotoList = await App.EdUnityRepo.GetPhotos();
+		PhotoList.Reverse();
+	}
+	private void OpenPopup()
+	{
+		PopupDisplay = true;
+	}
+	private void ClosePopup()
+	{
+		PopupDisplay = false;
+	}
+	private async Task HandleImageChange(InputFileChangeEventArgs e)
+	{
+		ImageFile = e.File;
+	}
+	private async Task<string> SaveFile(IBrowserFile imageFile)
+	{
+		if (imageFile != null)
+		{
+			var appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			var uploadsFolder = Path.Combine(appDirectory, "wwwroot", "img", "photos");
+			var filePath = Path.Combine(uploadsFolder, imageFile.Name);
+			Directory.CreateDirectory(uploadsFolder);
+			using (var fileStream = new FileStream(filePath, FileMode.Create))
+			{
+				await imageFile.OpenReadStream().CopyToAsync(fileStream);
+			}
+			var splittedPath = filePath.Split("wwwroot\\");
 
-    private void ExpandImage(string imagePath)
-    {
-        ExpandedImagePath = imagePath;
-        IsImageExpanded = true;
-    }
-
-    private void CollapseImage()
-    {
-        IsImageExpanded = false;
-    }
-
-    public class Photo
-    {
-        public string ImagePath { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-    }
+			if (splittedPath.Length > 1)
+			{
+				// Return the path after "Uploads/"
+				return splittedPath[1].Replace("\\", "/");
+			}
+		}
+		return null; // Return null if no file was selected
+	}
+	private async Task Submit()
+	{
+		if (Model.TITLE == null || ImageFile == null) return;
+		Model.PATH = await SaveFile(ImageFile);
+		await App.EdUnityRepo.AddPhoto(Model);
+		await LoadPhotos();
+		ClosePopup();
+	}
 }

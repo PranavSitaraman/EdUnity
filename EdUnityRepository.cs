@@ -1,6 +1,7 @@
 ﻿using SQLite;
 using EdUnity.Data;
 using System.Data;
+using System.Linq;
 
 namespace EdUnity
 {
@@ -24,10 +25,20 @@ namespace EdUnity
 				return;
 			}
 			conn = new SQLiteAsyncConnection(_dbPath);
-			await conn.CreateTablesAsync<User, Event, Institution>();
-			/*await AddData.CreateUsers(conn);
-			await AddData.CreateEvents(conn);
-			await AddData.CreateSchools(conn);*/
+			await conn.CreateTablesAsync<User, Event, Institution, Photo, Game>();
+			await conn.CreateTablesAsync<Course, Assignment, Attendance>();
+			try
+			{
+				await AddData.CreateUsers(conn);
+				await AddData.CreateEvents(conn);
+				await AddData.CreateSchools(conn);
+				await AddData.CreatePhotos(conn);
+				await AddData.CreateGames(conn);
+				await AddData.CreateCourses(conn);
+				await AddData.CreateAssignments(conn);
+				await AddData.CreateAttendance(conn);
+			}
+			catch (Exception ex) {; }
 		}
 
 		// users table operations
@@ -118,6 +129,12 @@ namespace EdUnity
 		{
 			return institution;
 		}
+		// retrieve institution using ID
+		public async Task<Institution> GetInstitution(int id)
+		{
+			await Init();
+			return await (from s in conn.Table<Institution>() where s.ID == id select s).FirstOrDefaultAsync();
+		}
 		// retrieve institution using name
 		public async Task<Institution> GetInstitution(string name)
 		{
@@ -129,6 +146,50 @@ namespace EdUnity
 		{
 			await Init();
 			return await conn.Table<Institution>().Where(s => s.NAME.StartsWith(searchTerm)).Take(5).ToListAsync();
+		}
+
+		// photos table operations
+		// get all photos
+		public async Task<List<Photo>> GetPhotos()
+		{
+			await Init();
+			return await conn.Table<Photo>().ToListAsync();
+		}
+		public async Task<bool> AddPhoto(Photo p)
+		{
+			await Init();
+			await conn.InsertAsync(p);
+			return true;
+		}
+
+		// athletics table operations
+		// get all games
+		public async Task<List<Game>> GetGames()
+		{
+			await Init();
+			return await conn.Table<Game>().ToListAsync();
+		}
+
+		// courses table operations
+		// get all courses
+		public async Task<List<Course>> GetCourses()
+		{
+			await Init();
+			return await conn.Table<Course>().ToListAsync();
+		}
+
+		// assignments table operations
+		// get all assignments
+		public async Task<List<Assignment>> GetAssignments()
+		{
+			await Init();
+			return await conn.Table<Assignment>().ToListAsync();
+		}
+
+		public async Task<Attendance> GetAttendance(string d)
+		{
+			await Init();
+			return await (from a in conn.Table<Attendance>() where a.USER_ID == user.ID && a.DATE == d select a).FirstOrDefaultAsync();
 		}
 	}
 }

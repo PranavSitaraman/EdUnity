@@ -1,0 +1,95 @@
+﻿.course {
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.course-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #a62639;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.course-header div{
+    border: solid 1px white;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 0 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.course-name {
+    width: 50%;
+}
+
+.course-average{
+    width: 35%;
+}
+
+.course-grade{
+    width: 15%
+}
+
+.course-toggle {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+
+.assignments-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #511C29;
+}
+
+.assignments-table th,
+.assignments-table td {
+    border: 1px solid #ccc;
+    padding: 5px;
+    text-align: left;
+}
+
+.assignments-table th {
+    background-color: #f2f2f2;
+}
+
+.assignments {
+    margin-top: 10px;
+}
+
+.assignment-name {
+    color: #511c29;
+}
+
+.assignment-date,
+.assignment-grade {
+    color: #511c29;
+}
+
+.att-table{
+    color: #511C29;
+    width: 50vw;
+    text-align: center;
+}
+
+.att-bod{
+
+}
+
+.att-th {
+    border: solid 3px #511C29;
+    width: 20%;
+}
+
+.att-tr{
+
+}
+
+.att-td {
+    border: solid 3px #511C29;
+    width: 20%;
+}

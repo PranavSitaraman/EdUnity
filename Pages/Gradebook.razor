@@ -1,250 +1,192 @@
 ﻿@page "/gradebook"
-@using System.Globalization
-@using System.Collections.Generic
-@using System.IO
-@using Newtonsoft.Json
+
 @using EdUnity.Data
-@using System.Net
-@using Microsoft.Extensions.Primitives
-@using System.ComponentModel.DataAnnotations
-@using System.Net.Http.Headers
+
 <NavMenu Title="@Title" />
-@code
-{
-	public class Day
-	{
-		public int day { get; set; }
-		public DateTime date;
-		public bool IsCurrentMonth { get; set; }
-		public List<Event> ScheduledEvents { get; set; }
-	}
-	public class Week
-	{
-		public List<Day> Days { get; set; } = new List<Day>();
-	}
-	public class Event
-	{
-		public string title { get; set; }
-		public string description { get; set; }
-		public DateTime start { get; set; }
-		public DateTime end { get; set; }
-		public EventType type { get; set; }
-	}
-	public enum EventType
-	{
-		Holidays,
-		Clubs,
-		Athletics,
-		Celebrations
-	}
-}
-<section/>
+<section />
 <section>
-	<div class="d-flex justify-content-center" style="padding-bottom: 1em">
-		<h3 class="align-middle">This Week's Assignments</h3>
-	</div>
-	<table class="table">
-		<thead>
-			<tr>
-				@foreach (var dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
-				{
-					<th scope="col">@dayOfWeek.ToString().Substring(0, 3)</th>
-				}
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var week in Weeks)
-			{
-				<tr>
-					@foreach (var day in week.Days)
-					{
-						<td scope="row" @onclick="()=>ToggleDay(day)" style="background-color:@(day.Equals(selectedDay) ? "rgba(219, 50, 77, 0.2)" : "")">
-							<div class="@(day.IsCurrentMonth ? "day-header" : "text-muted")">@day.day</div>
-							<ul class="d-flex flex-row">
-								@foreach (var e in GetEvents(day.date))
-								{
-									<li class="event-dot" style="background-color:@GetType(e)"></li>
-								}
-							</ul>
-						</td>
-					}
-				</tr>
-			}
-		</tbody>
-	</table>
-	@if (selectedDay != null)
-	{
-		<div class="selected container-fluid">
-			<div class="row">
-				<h4 class="text-center">Events on <strong>@(selectedDayTitle)</strong></h4>
-			</div>
-			<div class="row my-3">
-				<div class="col container-fluid">
-					<ul class="list-group">
-						@foreach (var e in GetEvents(selectedDay.date))
+	<section id="attendance">
+		<center>
+			<h2>Attendance</h2>
+			<h5><i>Week of @currentWeek.ToString("MM/dd/yyyy");</i></h5>
+			<table class="att-table">
+				<thead class="att-head">
+					<tr class="att-tr">
+						<th class="att-th">M</th>
+						<th class="att-th">T</th>
+						<th class="att-th">W</th>
+						<th class="att-th">R</th>
+						<th class="att-th">F</th>
+					</tr>
+				</thead>
+				<tbody class="att-bod">
+					<tr class="att-tr">
+						@foreach (Attendance a in Week)
 						{
-							<li class="btn btn-dark list-group-item" style="background-color:@GetType(e)" @onclick="()=>SetEvent(e)">@e.title</li>
+							<td class="att-td" style="color:@GetColor(a)"></td>
 						}
-					</ul>
+					</tr>
+				</tbody>
+			</table>
+		</center>
+	</section>
+	<section id="grades" style="padding-bottom: 50px">
+		<center>
+			<h2>Gradebook</h2>
+		</center>
+		@foreach (var course in Classes)
+		{
+			<div class="course">
+				<div class="course-header" @onclick="(() => ToggleAssignments(course))">
+					<div class="course-name">@course.Name</div>
+					<div class="course-grade">@CalculateLetterGrade(course)</div>
+					<div class="course-average">Avg: @CalculateAverage(course)%</div>
 				</div>
-				@if (@selectedEvent != null)
-				{
-					<div class="col container-fluid">
-						<div class="row container-fluid">
-							<h4><strong>@selectedEvent.title</strong></h4>
-							<h6>@selectedEvent.description</h6>
-							<h6><strong>Start: </strong>@selectedEvent.start.ToString("hh:mm tt")</h6>
-							<h6><strong>End: </strong>@selectedEvent.end.ToString("hh:mm tt")</h6>
-						</div>
-					</div>
-				}
-				else
-				{
-					<div class="col container-fluid">
-						<div class="row container-fluid">
-							<h4><strong></strong></h4>
-						</div>
-					</div>
-				}
+				<div class="assignments" style="display: @(course.ShowAssignments ? "block" : "none")">
+					<table class="assignments-table">
+						<thead>
+							<tr>
+								<th>Due Date</th>
+								<th>Assignment Name</th>
+								<th>Grade</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var assignment in course.Assignments)
+							{
+								<tr>
+									<td>@assignment.DUEDATE</td>
+									<td>@assignment.NAME</td>
+									<td>@assignment.GRADE</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
 			</div>
-			<hr>
-			<div class="row justify-content-center mb-4">
-				<button class="btn active w-25" @onclick="OpenPopup">Add Event</button>
-			</div>
-		</div>
-	}
+		}
+	</section>
 </section>
-@code
-{
-	private string Title = "Gradebook";
-	private DateTime CurrentMonth = DateTime.Today;
-	private List<Week> Weeks = new();
-	private bool DayExpand;
-	private Day selectedDay;
-	private Event selectedEvent;
-	private Dictionary<string, List<Event>> allEvents;
-	private string selectedDayTitle;
-	private string popupDisplay = "none";
-	private Event Model = new();
-	private string collapseDay => DayExpand ? "selected" : "collapse";
+<section />
+
+@code {
+	private string Title = "Portal";
+	public class Class
+	{
+		public string Name { get; set; }
+		public List<Assignment> Assignments = new();
+		public bool ShowAssignments { get; set; }
+	}
+	private List<Class> Classes = new();
+	private List<Attendance> Week = new();
+	private DateTime currentWeek = DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek);
 	protected async override void OnInitialized()
 	{
-		DayExpand = false;
-		selectedDay = null;
-		selectedEvent = null;
-		await ReadEvents();
+		await LoadWeek();
+		await LoadClasses();
 		base.OnInitialized();
-		UpdateWeeks();
 		StateHasChanged();
 	}
-	private void PrevMonth()
+	private async Task LoadWeek()
 	{
-		ToggleDay(null);
-		CurrentMonth = CurrentMonth.AddMonths(-1);
-		UpdateWeeks();
-	}
-	private void NextMonth()
-	{
-		ToggleDay(null);
-		CurrentMonth = CurrentMonth.AddMonths(1);
-		UpdateWeeks();
-	}
-	private string GetType(Event e)
-	{
-		switch (e.type)
+		for (int i = 0; i < 5; i++)
 		{
-			case EventType.Holidays:
-				return "#936D06";
-			case EventType.Clubs:
-				return "#0624B6";
-			case EventType.Athletics:
-				return "#107B05";
-			case EventType.Celebrations:
-				return "#986525";
-			default:
-				return "";
+			Week.Add((await App.EdUnityRepo.GetAttendance(currentWeek.AddDays(i).ToString("mm/dd/YYYY"))));
 		}
 	}
-	private async Task ReadEvents()
+	private async Task LoadClasses()
 	{
-		using var stream = await FileSystem.OpenAppPackageFileAsync("grades.json");
-		using (var reader = new StreamReader(stream))
+		List<Course> courses = await App.EdUnityRepo.GetCourses();
+		List<Assignment> assignments = await App.EdUnityRepo.GetAssignments();
+		foreach (Course c in courses)
 		{
-			var json = await reader.ReadToEndAsync();
-			allEvents = JsonConvert.DeserializeObject<Dictionary<string, List<Event>>>(json);
+			Class d = new Class { Name = c.NAME };
+			foreach (Assignment a in assignments)
+			{
+				if (a.COURSE_ID == c.ID)
+				{
+					a.DUEDATE = DateTime.Parse(a.DUEDATE).ToString("MM/dd");
+					d.Assignments.Add(a);
+				}
+			}
+			Classes.Add(d);
 		}
 	}
-	private void UpdateWeeks()
+	private void ToggleAssignments(Class course)
 	{
-		var firstDayOfMonth = new DateTime(CurrentMonth.Year, CurrentMonth.Month, 1);
-		var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-		var start = firstDayOfMonth.AddDays(-(int)firstDayOfMonth.DayOfWeek);
-		var end = lastDayOfMonth.AddDays(6 - (int)lastDayOfMonth.DayOfWeek);
-		var weeks = new List<Week>();
-		for (var date = start; date <= end; date = date.AddDays(1))
+		course.ShowAssignments = !course.ShowAssignments;
+	}
+	private double CalculateAverage(Class course)
+	{
+		if (course.Assignments.Count > 0)
 		{
-			if (date.DayOfWeek == DayOfWeek.Sunday) weeks.Add(new Week());
-			weeks.Last().Days.Add(new Day {
-				date = date,
-				day = date.Day,
-				IsCurrentMonth = date.Month == CurrentMonth.Month,
-				ScheduledEvents = GetEvents(date)
-			});
+			double totalGrade = 0;
+			foreach (var assignment in course.Assignments)
+			{
+				totalGrade += assignment.GRADE;
+			}
+
+			return totalGrade / course.Assignments.Count;
 		}
-		Weeks = weeks;
+
+		return 0;
 	}
-	private void OpenPopup()
+	private string CalculateLetterGrade(Class course)
 	{
-		popupDisplay = "block";
-	}
-	private void ClosePopup()
-	{
-		popupDisplay = "none";
-	}
-	private List<Event> GetEvents(DateTime date)
-	{
-		List<Event> today = new();
-		foreach (Event e in allEvents[date.Month.ToString()]) if (date.Day >= e.start.Day && date.Day <= e.end.Day) today.Add(e);
-		return today;
-	}
-	private void SetEvent(Event e)
-	{
-		selectedEvent = e;
-	}
-	private void ToggleDay(Day day)
-	{
-		if (day == null)
+		double average = CalculateAverage(course);
+		int grade = (int)Math.Round(average, MidpointRounding.AwayFromZero);
+
+		if (grade >= 97)
 		{
-			DayExpand = false;
-			selectedDay = null;
-			selectedDayTitle = null;
-			selectedEvent = null;
+			return "A+";
+		}
+		else if (grade >= 93)
+		{
+			return "A";
+		}
+		else if (grade >= 90)
+		{
+			return "A-";
+		}
+		else if (grade >= 87)
+		{
+			return "B+";
+		}
+		else if (grade >= 83)
+		{
+			return "B";
+		}
+		else if (grade >= 80)
+		{
+			return "B-";
+		}
+		else if (grade >= 77)
+		{
+			return "C+";
+		}
+		else if (grade >= 73)
+		{
+			return "C";
+		}
+		else if (grade >= 70)
+		{
+			return "C-";
+		}
+		else if (grade >= 67)
+		{
+			return "D+";
+		}
+		else if (grade >= 65)
+		{
+			return "D";
 		}
 		else
 		{
-			if (day == selectedDay)
-			{
-				selectedDay = null;
-				DayExpand = false;
-				selectedEvent = null;
-			}
-			else
-			{
-				selectedDay = day;
-				DayExpand = true;
-				selectedDayTitle = selectedDay.date.ToString("dddd, MMMM d");
-				if (selectedDay.ScheduledEvents.Count() > 0) selectedEvent = selectedDay.ScheduledEvents[0];
-				else selectedEvent = null;
-			}
+			return "F";
 		}
 	}
-	private bool InvalidModel(Event m)
+	private string GetColor(Attendance a)
 	{
-		return m.title == null || m.description == null;
-	}
-	private void Submit()
-	{
-		if (InvalidModel(Model)) return;
-		selectedDay.ScheduledEvents.Add(Model);
+		switch (a.STATUS)
 	}
 }

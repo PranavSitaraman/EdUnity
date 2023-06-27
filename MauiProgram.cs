@@ -1,8 +1,5 @@
 ﻿using CommunityToolkit.Maui;
 using Blazored.Modal;
-using Blazorise;
-using Blazorise.Bootstrap;
-using Blazorise.Icons.FontAwesome;
 
 namespace EdUnity;
 
@@ -22,10 +19,6 @@ public static class MauiProgram
         builder.Services.AddSingleton<EdUnityRepository>(s => ActivatorUtilities.CreateInstance<EdUnityRepository>(s, dbPath));
 		builder.Services.AddMauiBlazorWebView();
 		builder.Services.AddBlazoredModal();
-		builder.Services.AddBlazorise(options =>
-		{
-			options.Immediate = true;
-		}).AddBootstrapProviders().AddFontAwesomeIcons();
 		builder.Services.AddBlazorWebViewDeveloperTools();
 		return builder.Build();
 	}

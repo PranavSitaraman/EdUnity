@@ -1,0 +1,46 @@
+﻿.game {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 2px solid #a62639;
+    background-color: #511c29;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 10px;
+}
+
+.game-info {
+    display: flex;
+    align-items: center;
+}
+
+.sport-icon {
+    font-size: 24px;
+    margin-right: 25px;
+}
+
+.game-date {
+    font-size: 18px;
+}
+
+.game-result {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 20px;
+}
+
+.team-name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.team-score {
+    font-size: 28px;
+}

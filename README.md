@@ -13,7 +13,7 @@ EdUnity is  a mobile application intended to help parents and the community stay
 
 4. **Athletics**: The Athletics button on the navigation bar will provide you with information related to sports activities and events happening at the school. This feature will include schedules, results, and other related information.
 
-5. **Gradebook**: The Gradebook button on the navigation bar will provide parents with access to their child's academic performance and progress. This feature will allow parents to view grades, assignments, and other related information.
+5. **Portal**: The Portal button on the navigation bar will provide parents with access to their child's academic performance and progress. This feature will allow parents to view grades, assignments, and other related information.
 
 6. **Transportation**: The Transportation button on the navigation bar will provide information related to school transportation services, including bus schedules, pick-up/drop-off locations, and other relevant details.
 

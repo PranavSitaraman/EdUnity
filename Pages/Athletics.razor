@@ -1,13 +1,88 @@
 ﻿@page "/athletics"
+@using EdUnity.Data
 @inject NavigationManager NavigationManager;
-<NavMenu Title="@Title"/>
-<section/>
+
+<NavMenu Title="@Title" />
+<section />
 <section>
-    @* TO-DO: ATHLETICS PAGE *@
-    <p>add here</p>
+	@foreach (var match in Matches)
+	{
+		<div class="game">
+			<div class="game-info">
+				<div class="sport-icon">
+					<span class="fa @GetSportIcon(match.game.SPORT) fa-2x"></span>
+				</div>
+				<div class="game-date">
+					@DateTime.Parse(match.game.DATE).ToString("MM/dd")
+				</div>
+			</div>
+			<div class="game-result">
+				<div class="team">
+					<div class="team-name">
+						@match.NAME_A
+					</div>
+					<div class="team-score">
+						@match.game.SCORE_A
+					</div>
+				</div>
+				<div class="versus">
+					VS
+				</div>
+				<div class="team">
+					<div class="team-name">
+						@match.NAME_B
+					</div>
+					<div class="team-score">
+						@match.game.SCORE_B
+					</div>
+				</div>
+			</div>
+		</div>
+	}
 </section>
-<section/>
-@code
-{
-    private string Title = "Athletics";
+<section />
+
+@code {
+	private string Title = "Athletics";
+	private class Match
+	{
+		public Game game { get; set; }
+		public string NAME_A { get; set; }
+		public string NAME_B { get; set; }
+	}
+	private List<Match> Matches = new();
+	protected async override void OnInitialized()
+	{
+		await LoadGames();
+		base.OnInitialized();
+		StateHasChanged();
+	}
+	private async Task LoadGames()
+	{
+		List<Game> games = await App.EdUnityRepo.GetGames();
+		foreach (Game g in games)
+		{
+			string a = (await App.EdUnityRepo.GetInstitution(g.TEAM_A)).NAME;
+			string b = (await App.EdUnityRepo.GetInstitution(g.TEAM_B)).NAME;
+			Matches.Add(new Match { game = g, NAME_A = a, NAME_B = b });
+		}
+	}
+	private string GetSportIcon(Sport sport)
+	{
+		switch (sport)
+		{
+			case Sport.Soccer:
+				return "fa-futbol";
+			case Sport.Football:
+				return "fa-football-ball";
+			case Sport.Basketball:
+				return "fa-basketball-ball";
+			case Sport.Hockey:
+				return "fa-hockey-puck";
+			case Sport.Baseball:
+				return "fa-baseball-ball";
+			default:
+				return "fa-sport";
+		}
+	}
 }

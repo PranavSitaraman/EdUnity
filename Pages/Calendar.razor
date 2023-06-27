@@ -1,8 +1,6 @@
 ﻿@page "/calendar"
 
 @using EdUnity.Data
-@using Blazorise
-@using Blazorise.Bootstrap
 
 <NavMenu Title="@Title" />
 <section />
@@ -35,7 +33,7 @@
 						@* select/unselect each day  *@
 						<td scope="row" @onclick="()=>ToggleDay(day)" style="background-color:@(day.Equals(SelectedDay) ? "rgba(219, 50, 77, 0.2)" : "")">
 							<div class="@(day.IsCurrentMonth ? "day-header" : "text-muted")">@day.day</div>
-							<ul class="d-flex flex-row">
+							<ul class="events">
 								@* show all events as colored circles for each day *@
 								@foreach (var e in GetEvents(day.date))
 								{
@@ -58,7 +56,7 @@
 			</div>
 			<div class="row my-3">
 				@* show list of events for selected day *@
-				<div class="col container-fluid">
+				<div class="col container-fluid" style="max-width:30vw">
 					<ul class="list-group">
 						@foreach (var e in GetEvents(SelectedDay.date))
 						{
@@ -69,7 +67,7 @@
 				@* show selected event information on right *@
 				@if (SelectedEvent != null)
 				{
-					<div class="col container-fluid">
+					<div class="col container-fluid" style="max-width:70vw">
 						<div class="row container-fluid">
 							<h4><strong>@SelectedEvent.TITLE</strong></h4>
 							<h6>@SelectedEvent.DESCRIPTION</h6>
@@ -90,7 +88,7 @@
 			</div>
 			<hr>
 			<div class="row justify-content-center mb-4">
-				<button class="btn active w-25" @onclick="OpenPopup">Add Event</button>
+				<button class="btn active w-50" @onclick="OpenPopup">Add Event</button>
 			</div>
 			<br />
 			<br />
@@ -141,13 +139,13 @@
 							<div class="col">
 								<label class="form-label">Start Time</label>
 								<div>
-									<TimePicker TValue="TimeSpan?" Inline @bind-Value="StartTime"/>
+									<InputText type="time" @bind-Value="StartTimeProxy" />
 								</div>
 							</div>
 							<div class="col">
 								<label class="form-label">End Time</label>
 								<div>
-									<TimePicker TValue="TimeSpan?" Inline @bind-Value="EndTime" />
+									<InputText type="time" @bind-Value="EndTimeProxy" />
 								</div>
 							</div>
 						</div>
@@ -171,8 +169,6 @@
 <section />
 @code
 {
-	// TO-DO: ADD TIME SELECTIONS FOR CREATE EVENT
-
 	private string Title = "Calendar";
 
 	// static calendar data
@@ -190,8 +186,18 @@
 	// add event
 	private bool PopupDisplay = false;
 	private Event Model = new();
-	private DateTime StartDate = DateTime.Today, EndDate = DateTime.Today;
-	private TimeSpan? StartTime = TimeSpan.Zero, EndTime = TimeSpan.Zero;
+	private String StartTimeProxy
+	{
+		get => StartTime.ToString();
+		set => TimeSpan.TryParse(value, out StartTime);
+	}
+	private String EndTimeProxy
+	{
+		get => EndTime.ToString();
+		set => TimeSpan.TryParse(value, out EndTime);
+	}
+	private DateTime StartDate = DateTime.Now.Date, EndDate = DateTime.Now.Date;
+	private TimeSpan StartTime = (TimeSpan)(DateTime.Now - DateTime.Now.Date), EndTime = (TimeSpan)(DateTime.Now - DateTime.Now.Date);
 
 	// each day (square) on calendar
 	public class Day
@@ -272,9 +278,8 @@
 	private async Task Submit()
 	{
 		if (Model.TITLE == null) return;
-		// TO-DO: FIX TIME ADDING TO EVENTS
-		Model.START = StartDate.Add(StartTime.Value).ToString();
-		Model.END = EndDate.Add(EndTime.Value).ToString();
+		Model.START = StartDate.Add(StartTime).ToString();
+		Model.END = EndDate.Add(EndTime).ToString();
 		Model.CREATOR_ID = Preferences.Get("ID", -1);
 		await App.EdUnityRepo.AddEvent(Model);
 		await LoadEvents();
