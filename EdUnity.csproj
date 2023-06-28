@@ -55,6 +55,7 @@
 
 	<ItemGroup>
 		<None Remove="Pages\ActionMenu.razor.css" />
+		<None Remove="Pages\Home.razor.css" />
 		<None Remove="Pages\Login.razor.css" />
 		<None Remove="Pages\Photos.razor.css" />
 		<None Remove="Pages\Transportation.razor.css" />
@@ -65,6 +66,7 @@
 		<Content Include="Data\InputSelectEnum.cs" />
 		<Content Include="Pages\ActionMenu.razor.css" />
 		<Content Include="Pages\Gradebook.razor.css" />
+		<Content Include="Pages\Home.razor.css" />
 		<Content Include="Pages\Login.razor.css" />
 		<Content Include="Data\Pin.cs" />
 		<Content Include="Pages\Photos.razor.css" />

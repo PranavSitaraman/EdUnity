@@ -26,7 +26,7 @@
 		<EditForm Model="@Model" OnValidSubmit="@Submit">
 			<DataAnnotationsValidator />
 			<div class="form-input">
-				<label class="form-label">Old Password</label>
+				<label class="form-label">old password</label>
 				<div>
 					<InputText type="password" class="form-control" placeholder="Old Password" @bind-Value="Model.OldPassword" />
 				</div>
@@ -34,13 +34,13 @@
 			<div class="form-input">
 				<label class="form-label">New Password</label>
 				<div>
-					<InputText type="password" class="form-control" placeholder="New Password" @bind-Value="Model.NewPassword" />
+					<InputText type="password" class="form-control" placeholder="new password" @bind-Value="Model.NewPassword" />
 				</div>
 			</div>
 			<div class="form-input">
 				<label class="form-label">Confirm New Password</label>
 				<div>
-					<InputText type="password" class="form-control" placeholder="Confirm New Password" @bind-Value="Model.PasswordConfirm" />
+					<InputText type="password" class="form-control" placeholder="confirm password" @bind-Value="Model.PasswordConfirm" />
 				</div>
 			</div>
 			<ValidationSummary />

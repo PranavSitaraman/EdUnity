@@ -3,13 +3,47 @@
 @inject NavigationManager NavigationManager;
 
 <NavMenu Title="@Title" />
-<section />
+<section/>
 <section>
-    @* TO-DO: HOME PAGE *@
-    <p>add here</p>
+	<div class="d-flex flex-wrap justify-content-center" style="margin-bottom: 120px; margin-top: 20px;">
+		<a href="/calendar">
+		<div class="card" style="width: 80vw; height: 150px; background-color: #FF5E5B" >
+			<h2>Calendar</h2>
+			<h4>Wednesday, June 28</h4>
+			<h6>1 event scheduled for today.</h6>
+		</div>
+		</a>
+		<a href="/photos">
+		<div class="card" style="width: 80vw;height: 150px; background-color: #FFED66">
+			<h2>Photos</h2>
+			<h4>New post for Senior Capstones!</h4>
+			<h4>Share new photos!</h4>
+		</div>
+		</a>
+		<a href="/athletics">
+		<div class="card" style="width: 80vw; height: 150px; background-color: #FFFFEA">
+			<h2>Athletics</h2>
+			<h4>Basketball state champions!</h4>
+			<h4>Soccer team defeats rivals 3-2!</h4>
+		</div>
+		</a>
+		<a href="/gradebook">
+		<div class="card" style="width: 80vw; height: 150px; background-color: #00CECB">
+			<h2>Portal</h2>
+			<h4>Marked PRESENT today.</h4>
+			<h4>New Comp Sci assignment!</h4>
+		</div>
+		</a>
+		<a href="/transportation">
+		<div class="card" style="width: 80vw; height: 150px; background-color: #D8D8D8">
+			<h2>Transporation</h2>
+			<h4>No rides scheduled today</h4>
+		</div>
+		</a>
+	</div>
 </section>
 <section />
 @code
 {
-    private string Title = "Home";
+	private string Title = "Home";
 }

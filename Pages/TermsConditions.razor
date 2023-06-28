@@ -1,6 +1,8 @@
 ﻿@page "/terms-conditions/{returnurl}"
-<section>
-	<p><strong>Terms and Conditions</strong></p>
+@inject NavigationManager NavigationManager;
+<NavMenu Title="@Title" />
+<section />
+<section style="margin:0 20px 150px 20px">
 	<p>
 		Welcome to the EdUnity Mobile Application, which is owned and operated by Middlesex
 		County Academy. EdUnity is intended to help parents and the community stay up-to-date
@@ -17,7 +19,7 @@
 		</li>
 		<li>
 			<p>
-				<strong>User Accounts:</strong> In order to use certain features ofUdUnity, you may need to create a
+				<strong>User Accounts:</strong> In order to use certain features of EdUnity, you may need to create a
 				user account. You are responsible for maintaining the confidentiality of your user
 				account information, including your password. You agree to notify the School
 				immediately of any unauthorized use of your account or password.
@@ -85,7 +87,9 @@
 		<a href="@returnurl" class="btn my-4" style="background-color: #a62639; color: white; border: none;">← Back</a>
 	</div>
 </section>
+<section/>
 @code
 {
+	private string Title = "T&Cs";
 	[Parameter] public string returnurl { get; set; }
 }

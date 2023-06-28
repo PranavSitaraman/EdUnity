@@ -1,9 +1,9 @@
 ﻿@page "/about"
 
-@* TO-DO: MAKE THIS LOOK BETTER AND MATCH THEME*@
-
-<section>
-	<h1>EdUnity</h1>
+@inject NavigationManager NavigationManager;
+<NavMenu Title="@Title" />
+<section/>
+<section style="margin:0 20px 150px 20px">
 	<h2 id="introduction">About</h2>
 	<p>EdUnity is a mobile application intended to help parents and the community stay up-to-date with important information and upcoming events related to the School. This document will serve as your guide to using EdUnity, outlining the features and navigation integrated into the application</p>
 	<h2 id="navigation">Navigation</h2>
@@ -39,3 +39,8 @@
 		<a href="/profile" class="btn my-4" style="margin-right:5%;margin-left:5%;background-color: #a62639; color: white; border: none;">← Back</a>
 	</div>
 </section>
+<section />
+@code
+{
+	private string Title = "About";
+}

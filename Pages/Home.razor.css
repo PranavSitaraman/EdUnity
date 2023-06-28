@@ -1,0 +1,16 @@
+﻿h4 {
+    font-style: italic;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.card {
+    margin-bottom: 30px;
+    padding: 10px 30px;
+}
+
+a
+{
+    text-decoration: none;
+    color: black;
+}

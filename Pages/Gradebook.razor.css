@@ -86,10 +86,17 @@
 }
 
 .att-tr{
-
+    padding: 40px;
 }
 
 .att-td {
     border: solid 3px #511C29;
     width: 20%;
+}
+
+.week-nav {
+    margin: 0 1.5em;
+    padding: 0 1em;
+    color: white;
+    background-color: #511c29;
 }
