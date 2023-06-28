@@ -119,7 +119,7 @@
 			if ((await App.EdUnityRepo.AddUser(Model)))
 			{
 				ResultMessage = "Your credentials will be verified and authorized shortly.";
-				File.Copy("img/users/default.jpg", "img/users/" + ((await App.EdUnityRepo.GetUserCount()) + 1) + ".jpg");
+//				File.Copy("img/users/default.jpg", "img/users/" + ((await App.EdUnityRepo.GetUserCount()) + 1) + ".jpg");
 				StateHasChanged();
 				await Task.Delay(2500);
 				NavigationManager.NavigateTo("/login");
@@ -146,7 +146,7 @@
 				if ((await App.EdUnityRepo.AddUser(Model)))
 				{
 					ResultMessage = "Your credentials will be verified and authorized shortly.";
-					File.Copy("img/users/default.jpg", "img/users/" + ((await App.EdUnityRepo.GetUserCount()) + 1) + ".jpg");
+//					File.Copy("img/users/default.jpg", "img/users/" + ((await App.EdUnityRepo.GetUserCount()) + 1) + ".jpg");
 					StateHasChanged();
 					await Task.Delay(2500);
 					NavigationManager.NavigateTo("/login");
@@ -163,7 +163,7 @@
 	{
 		string name = e.Value.ToString();
 		AutocompleteResults = await App.EdUnityRepo.SuggestInstitutions(name.ToUpper());
-		ShowAutocompleteResults = AutocompleteResults.Count > 0;
+		ShowAutocompleteResults = (AutocompleteResults.Count > 0);
 	}
 	private void SetSelectedInstitution(Institution school)
 	{

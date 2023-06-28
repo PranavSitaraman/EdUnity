@@ -30,8 +30,8 @@ namespace EdUnity
 			try
 			{
 				await AddData.CreateUsers(conn);
-				await AddData.CreateEvents(conn);
 				await AddData.CreateSchools(conn);
+				await AddData.CreateEvents(conn);
 				await AddData.CreatePhotos(conn);
 				await AddData.CreateGames(conn);
 				await AddData.CreateCourses(conn);

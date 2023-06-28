@@ -75,8 +75,10 @@
 	}
 	private string GetSportIcon(Sport sport)
 	{
+		// based on which sport is being displayed in the record
 		switch (sport)
 		{
+			// retrieve icons from Font Awesome's library for use
 			case Sport.Soccer:
 				return "fa-futbol";
 			case Sport.Football:
@@ -88,6 +90,7 @@
 			case Sport.Baseball:
 				return "fa-baseball-ball";
 			default:
+				// return a plain ball
 				return "fa-sport";
 		}
 	}

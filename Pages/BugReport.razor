@@ -4,32 +4,22 @@
 @using Microsoft.Extensions.Primitives
 @using System.ComponentModel.DataAnnotations
 @using System.Net.Http.Headers
-@code
-{
-	public class PasswordModel
-	{
-		public string OldPassword { get; set; }
-		public string NewPassword { get; set; }
-		public string PasswordConfirm { get; set; }
-		public bool ModelsIsNull()
-		{
-			return OldPassword == null || NewPassword == null || PasswordConfirm == null;
-		}
-	}
-}
 <NavMenu Title="@Title" />
 <section/>
 <section>
 	<div class="form-outer">
+		@*EdUnity logo above formy*@
 		<img src="img/edunity-transparent.png" />
 		<div style="margin-top:10%">
 			<h5>Submit Screenshot:</h5>
 			<input style="margin-top:5%" type="file" accept="image/png, image/jpeg, image/jpg">
 		</div>
+		@*text entry area for bug description, recreation steps*@
 		<div style="margin-top:10%" class="form-floating">
 			<h6>Please describe the bug:</h6>
 			<textarea class="form-control" placeholder="Leave a suggestion or bug report here!" id="floatingTextarea" style="height: 200px;"></textarea>
 		</div>
+		@*submit bug ticket to district developers*@
 		<div style="margin-top:5%" class="col d-flex justify-content-center">
 			<a href="/profile" class="btn my-4" style="margin-right:5%;margin-left:5%;background-color: #a62639; color: white; border: none;">← Back</a>
 			<button @onclick="Submit" class="btn my-4">Submit</button>

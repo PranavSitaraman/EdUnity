@@ -67,13 +67,17 @@
 	private string resultMessage;
 	private async void Submit()
 	{
+		// nothing was entered into the form
 		if (Model.ModelsIsNull()) resultMessage = "Please enter valid credentials!";
+		// check if old passwords match and new passwords match
 		else if (Model.OldPassword.Equals(App.EdUnityRepo.GetCurrentUser().PASSWORD) && Model.NewPassword.Equals(Model.PasswordConfirm))
 		{
+			// send query request to SQL database to update password 
 			await App.EdUnityRepo.UpdateUser(Model.NewPassword);
 			resultMessage = "Your password has been updated!";
 			StateHasChanged();
 		}
+		// incorrect fields entered into form, request re-do
 		else resultMessage = "Please enter valid credentials!";
 		StateHasChanged();
 	}

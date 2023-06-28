@@ -13,6 +13,7 @@
 				<h5><i>Week of @currentWeek.ToString("MM/dd/yyyy")</i></h5>
 				<button class="btn week-nav" @onclick="NextWeek">&gt;</button>
 			</div>
+			<div class="btn week-nav" style="margin-bottom: 30px" @onclick="Notify">@notifier</div>
 			<table class="att-table">
 				<thead class="att-head">
 					<tr class="att-tr">
@@ -89,6 +90,7 @@
 	string[] Week = { "Unmarked", "Unmarked", "Unmarked", "Unmarked", "Unmarked" };
 	private DateTime currentWeek = DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek + 1);
 	bool initializedDone = false;
+	private string notifier = "Notify of Absence";
 	protected async override void OnInitialized()
 	{
 		await LoadWeek();
@@ -102,7 +104,6 @@
 		for (int i = 0; i < 5; i++)
 		{
 			Attendance a = await App.EdUnityRepo.GetAttendance(currentWeek.AddDays(i).ToString("yyyy-MM-dd"));
-			Console.WriteLine(currentWeek.AddDays(i).ToString("yyyy-MM-dd"));
 			if (a != null)
 			{
 				Week[i] = (a.STATUS == AttendanceStatus.Present ? "P" : (a.STATUS == AttendanceStatus.Tardy ? "T" : "A"));
@@ -111,19 +112,24 @@
 	}
 	private async Task LoadClasses()
 	{
+		// gather all the school's courses from SQL database
 		List<Course> courses = await App.EdUnityRepo.GetCourses();
+		// gather all the student's assignments from SQL database
 		List<Assignment> assignments = await App.EdUnityRepo.GetAssignments();
 		foreach (Course c in courses)
 		{
 			Class d = new Class { Name = c.NAME };
 			foreach (Assignment a in assignments)
 			{
+				// add assignment to course if it belongs there
 				if (a.COURSE_ID == c.ID)
 				{
 					a.DUEDATE = DateTime.Parse(a.DUEDATE).ToString("MM/dd");
 					d.Assignments.Add(a);
 				}
 			}
+			// show assignments from newest to oldest
+			d.Assignments.Reverse();
 			Classes.Add(d);
 		}
 	}
@@ -216,5 +222,11 @@
 	{
 		currentWeek = currentWeek.AddDays(7);
 		await LoadWeek();
+	}
+	private void Notify()
+	{
+		notifier = "Notified ✓";
+		Week[2] = "A";
+		StateHasChanged();
 	}
 }

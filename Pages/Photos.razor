@@ -125,12 +125,14 @@
 	{
 		if (imageFile != null)
 		{
+			// manipulated folder paths to locate download folder on device
 			var appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			var uploadsFolder = Path.Combine(appDirectory, "wwwroot", "img", "photos");
 			var filePath = Path.Combine(uploadsFolder, imageFile.Name);
 			Directory.CreateDirectory(uploadsFolder);
 			using (var fileStream = new FileStream(filePath, FileMode.Create))
 			{
+				// copy data from uploaded image to file
 				await imageFile.OpenReadStream().CopyToAsync(fileStream);
 			}
 			var splittedPath = filePath.Split("wwwroot\\");

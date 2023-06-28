@@ -1,14 +1,17 @@
-﻿h4 {
+﻿/* override default with custom font size */
+h4 {
     font-style: italic;
     font-size: 16px;
     font-weight: bold;
 }
 
+/* add spacing above and below cards to prevent overlap*/
 .card {
     margin-bottom: 30px;
     padding: 10px 30px;
 }
 
+/* remove blue link underline from text */
 a
 {
     text-decoration: none;
