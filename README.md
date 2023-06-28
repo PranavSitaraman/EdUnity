@@ -3,6 +3,10 @@
 
 EdUnity is  a mobile application intended to help parents and the community stay up-to-date with important information and upcoming events related to the School. This document will serve as your guide to using EdUnity, outlining the features and navigation integrated into the application
 
+# Presentation
+
+## https://docs.google.com/presentation/d/1DK2JFdld-RLCCCnsAKwdwq0jwMdZcNUyrIdLbALMEqM/edit?usp=sharing
+
 # Navigation
 
 1. **Home**: The Home button on the navigation bar will take you back to the main screen of the application, which serves as the starting point for accessing all other features and functionalities.
