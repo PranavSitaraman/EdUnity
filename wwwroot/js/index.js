@@ -31,7 +31,7 @@ function initialize(netObject)
     mapNetObject = netObject;
     let latLng = new google.maps.LatLng(40.504362, -74.369188);
     let options = {
-        zoom: 18,
+        zoom: 12,
         center: latLng,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         streetViewControl: false,

@@ -4,10 +4,12 @@
 <NavMenu Title="@Title" />
 <section style="padding:0px"/>
 <section style="padding:0px">
+    <center>
     <div class="long-press-menu">
         <div @onclick="Pickup">Pickup Mode</div>
         <div style="border-left: thick groove white" @onclick="Dropoff">Dropoff Mode</div>
     </div>
+    </center>
 @if (_lat != null && _lon != null)
 {
     <ActionMenu Lat="@((double)_lat)" Lon="@((double)_lon)" CloseCallback="@CloseActionMenu" />

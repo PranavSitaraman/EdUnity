@@ -21,15 +21,19 @@
 				</thead>
 				<tbody class="att-bod">
 					<tr class="att-tr">
-						@foreach (Attendance a in Week)
+						@if (initializedDone)
 						{
-							<td class="att-td" style="color:@GetColor(a)"></td>
+							@foreach (string a in Week)
+							{
+								<td class="att-td" style="color:@GetColor(a)">@a</td>
+							}
 						}
 					</tr>
 				</tbody>
 			</table>
 		</center>
 	</section>
+	<br />
 	<section id="grades" style="padding-bottom: 50px">
 		<center>
 			<h2>Gradebook</h2>
@@ -78,20 +82,27 @@
 		public bool ShowAssignments { get; set; }
 	}
 	private List<Class> Classes = new();
-	private List<Attendance> Week = new();
-	private DateTime currentWeek = DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek);
+	string[] Week = { "Unmarked", "Unmarked", "Unmarked", "Unmarked", "Unmarked" };
+	private DateTime currentWeek = DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek + 1);
+	bool initializedDone = false;
 	protected async override void OnInitialized()
 	{
 		await LoadWeek();
 		await LoadClasses();
 		base.OnInitialized();
+		initializedDone = true;
 		StateHasChanged();
 	}
 	private async Task LoadWeek()
 	{
 		for (int i = 0; i < 5; i++)
 		{
-			Week.Add((await App.EdUnityRepo.GetAttendance(currentWeek.AddDays(i).ToString("mm/dd/YYYY"))));
+			Attendance a = await App.EdUnityRepo.GetAttendance(currentWeek.AddDays(i).ToString("yyyy-MM-dd"));
+			Console.WriteLine(currentWeek.AddDays(i).ToString("yyyy-MM-dd"));
+			if (a != null)
+			{
+				Week[i] = (a.STATUS == AttendanceStatus.Present ? "Present" : (a.STATUS == AttendanceStatus.Tardy ? "Tardy" : "Absent"));
+			}
 		}
 	}
 	private async Task LoadClasses()
@@ -185,8 +196,11 @@
 			return "F";
 		}
 	}
-	private string GetColor(Attendance a)
+	private string GetColor(string a)
 	{
-		switch (a.STATUS)
+		if (a.Equals("Absent")) return "red";
+		else if (a.Equals("Tardy")) return "blue";
+		else if (a.Equals("Present")) return "green";
+		else return "black";
 	}
 }

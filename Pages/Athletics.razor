@@ -7,37 +7,43 @@
 <section>
 	@foreach (var match in Matches)
 	{
-		<div class="game">
-			<div class="game-info">
-				<div class="sport-icon">
+		<center>
+		<div class="game" style="width:95vw">
+			<div class="game-info" style="width:15vw">
+				<div class="sport-icon game-date">
 					<span class="fa @GetSportIcon(match.game.SPORT) fa-2x"></span>
-				</div>
-				<div class="game-date">
 					@DateTime.Parse(match.game.DATE).ToString("MM/dd")
 				</div>
 			</div>
 			<div class="game-result">
-				<div class="team">
+				<div class="team" style="width:20vw">
+					<center>
 					<div class="team-name">
 						@match.NAME_A
 					</div>
 					<div class="team-score">
 						@match.game.SCORE_A
 					</div>
+					</center>
 				</div>
-				<div class="versus">
+				<div class="versus" style="width:15vw">
+					<center>
 					VS
+					</center>
 				</div>
-				<div class="team">
+				<div class="team" style="width:20vw">
+					<center>
 					<div class="team-name">
 						@match.NAME_B
 					</div>
 					<div class="team-score">
 						@match.game.SCORE_B
 					</div>
+					</center>
 				</div>
 			</div>
 		</div>
+		</center>
 	}
 </section>
 <section />

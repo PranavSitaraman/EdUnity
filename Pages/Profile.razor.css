@@ -6,21 +6,15 @@
 }
 
 .grid-container {
+    margin-left: 15vw;
+    margin-right: auto;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 1em;
-    margin-top: 2em;
-    margin-bottom: 1em;
+    grid-template-columns: repeat(2, 30vw);
+    grid-gap: 5vw;
 }
 
 .grid-item {
     text-align: center;
-}
-
-@media (max-width: 400px) {
-    .grid-container {
-        grid-template-columns: 1fr;
-    }
 }
 
 .profile-container {

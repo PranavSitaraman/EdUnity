@@ -189,7 +189,7 @@ namespace EdUnity
 		public async Task<Attendance> GetAttendance(string d)
 		{
 			await Init();
-			return await (from a in conn.Table<Attendance>() where a.USER_ID == user.ID && a.DATE == d select a).FirstOrDefaultAsync();
+			return await (from a in conn.Table<Attendance>() where a.DATE.Equals(d) select a).FirstOrDefaultAsync();
 		}
 	}
 }

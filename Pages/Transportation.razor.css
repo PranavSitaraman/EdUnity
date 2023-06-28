@@ -3,11 +3,14 @@
     background-color: #e66c7e;
     border: thick groove white;
     position: fixed;
-    top: 0;
+    top: 6rem;
     z-index: 10;
     display: flex;
-    margin-top: 110px;
-    margin-left: calc(100vw - 300px - 25px);
+    width:300px;
+    margin: auto auto;
+    left: 0;
+    right: 0;
+    max-width:80vw;
     border-radius: 10px;
 }
 .long-press-menu div
